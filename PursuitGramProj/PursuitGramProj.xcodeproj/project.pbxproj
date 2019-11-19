@@ -15,7 +15,9 @@
 		50281BD42383369B0022B9D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50281BD22383369B0022B9D9 /* LaunchScreen.storyboard */; };
 		50281BDF2383369B0022B9D9 /* PursuitGramProjTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BDE2383369B0022B9D9 /* PursuitGramProjTests.swift */; };
 		50281BEA238336C20022B9D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 50281BE9238336C20022B9D9 /* GoogleService-Info.plist */; };
-		5040D9932384968000D58D90 /* UserLoginVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5040D9922384968000D58D90 /* UserLoginVCViewController.swift */; };
+		5040D99623849CB800D58D90 /* PursuitGramTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5040D99523849CB800D58D90 /* PursuitGramTabBarVC.swift */; };
+		50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */; };
+		50EFDD5B2384A2BD00AFD6AD /* email&PassCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD5A2384A2BD00AFD6AD /* email&PassCheck.swift */; };
 		B688E8097E16FFE9B1244CA7 /* Pods_PursuitGramProj.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D249979781B3A0E9ACAD3D3C /* Pods_PursuitGramProj.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +46,9 @@
 		50281BDE2383369B0022B9D9 /* PursuitGramProjTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PursuitGramProjTests.swift; sourceTree = "<group>"; };
 		50281BE02383369B0022B9D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50281BE9238336C20022B9D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5040D9922384968000D58D90 /* UserLoginVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginVCViewController.swift; sourceTree = "<group>"; };
+		5040D99523849CB800D58D90 /* PursuitGramTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PursuitGramTabBarVC.swift; sourceTree = "<group>"; };
+		50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginVC.swift; sourceTree = "<group>"; };
+		50EFDD5A2384A2BD00AFD6AD /* email&PassCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "email&PassCheck.swift"; sourceTree = "<group>"; };
 		A2C1D74C6B35A2F0F435D516 /* Pods-PursuitGramProj.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PursuitGramProj.debug.xcconfig"; path = "Target Support Files/Pods-PursuitGramProj/Pods-PursuitGramProj.debug.xcconfig"; sourceTree = "<group>"; };
 		D249979781B3A0E9ACAD3D3C /* Pods_PursuitGramProj.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PursuitGramProj.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D95B73CBD154162BC2F746AD /* Pods-PursuitGramProjTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PursuitGramProjTests.release.xcconfig"; path = "Target Support Files/Pods-PursuitGramProjTests/Pods-PursuitGramProjTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -93,7 +97,8 @@
 		50281BC62383369A0022B9D9 /* PursuitGramProj */ = {
 			isa = PBXGroup;
 			children = (
-				5040D9912384964B00D58D90 /* LoginVC */,
+				50EFDD592384A29100AFD6AD /* Utilities */,
+				5040D99423849BC700D58D90 /* Controllers */,
 				50281BC72383369A0022B9D9 /* AppDelegate.swift */,
 				50281BC92383369A0022B9D9 /* SceneDelegate.swift */,
 				50281BCB2383369A0022B9D9 /* ViewController.swift */,
@@ -117,9 +122,34 @@
 		5040D9912384964B00D58D90 /* LoginVC */ = {
 			isa = PBXGroup;
 			children = (
-				5040D9922384968000D58D90 /* UserLoginVCViewController.swift */,
+				50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */,
 			);
 			path = LoginVC;
+			sourceTree = "<group>";
+		};
+		5040D99423849BC700D58D90 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5040D9912384964B00D58D90 /* LoginVC */,
+				5040D99723849CF500D58D90 /* Posts */,
+				5040D99523849CB800D58D90 /* PursuitGramTabBarVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5040D99723849CF500D58D90 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Posts;
+			sourceTree = "<group>";
+		};
+		50EFDD592384A29100AFD6AD /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				50EFDD5A2384A2BD00AFD6AD /* email&PassCheck.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		DD4F57931CB10779F04C2DC3 /* Pods */ = {
@@ -311,8 +341,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				50281BCC2383369A0022B9D9 /* ViewController.swift in Sources */,
+				50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */,
 				50281BC82383369A0022B9D9 /* AppDelegate.swift in Sources */,
-				5040D9932384968000D58D90 /* UserLoginVCViewController.swift in Sources */,
+				50EFDD5B2384A2BD00AFD6AD /* email&PassCheck.swift in Sources */,
+				5040D99623849CB800D58D90 /* PursuitGramTabBarVC.swift in Sources */,
 				50281BCA2383369A0022B9D9 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
