@@ -16,6 +16,7 @@ class UserLoginVC: UIViewController {
         setupSubViews()
         // Do any additional setup after loading the view.
     }
+    // MARK: - UI objects
     lazy var pursuitGramLogo: UILabel = {
         let label = UILabel()
         label.text = "Pursuitsgram"
@@ -60,8 +61,11 @@ class UserLoginVC: UIViewController {
         attributedTitle.append(NSAttributedString(string: "Sign Up",attributes: [NSAttributedString.Key.font: UIFont(name: "Verdana-Bold", size: 14)!,
                                                                                  NSAttributedString.Key.foregroundColor:  UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)]))
         button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(showSignUp), for: .touchUpInside)
         return button
     }()
+    
+    // MARK: - VC functions and constraints
     private func setupSubViews() {
          setupPursuitGramLogo()
          setupCreateAccountButton()
@@ -75,6 +79,11 @@ class UserLoginVC: UIViewController {
              pursuitGramLogo.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
              pursuitGramLogo.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16)])
      }
+    @objc func showSignUp() {
+        let signupVC = SignUpVc()
+        signupVC.modalPresentationStyle = .formSheet
+        present(signupVC, animated: true, completion: nil)
+    }
     private func setupLoginStack() {
          let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField,loginButton])
          stackView.axis = .vertical
