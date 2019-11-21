@@ -9,10 +9,10 @@
 import UIKit
 
 class SignUpVc: UIViewController {
-
+    //MARK: - lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .white
         setUpUIObjects()
     }
@@ -26,27 +26,28 @@ class SignUpVc: UIViewController {
         return label
     }()
     lazy var emailTextField: UITextField = {
-     let textField = UITextField()
+        let textField = UITextField()
         textField.placeholder = "Enter email"
         textField.font = UIFont(name: "Verdana", size: 14)
         textField.backgroundColor = .white
         textField.borderStyle = .bezel
         textField.autocorrectionType = .no
-        textField.addTarget(self, action: #selector(validateFields), for: .touchUpInside)
+        textField.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return textField
         
     }()
     lazy var passwordTextField: UITextField = {
-         let textField = UITextField()
-         textField.placeholder = "Enter Password"
-         textField.font = UIFont(name: "Verdana", size: 14)
-         textField.backgroundColor = .white
-         textField.borderStyle = .bezel
-         textField.autocorrectionType = .no
-         textField.isSecureTextEntry = true
-         textField.addTarget(self, action: #selector(validateFields), for: .touchUpInside)
-         return textField
-     }()
+        let textField = UITextField()
+        textField.placeholder = "Enter Password"
+        textField.font = UIFont(name: "Verdana", size: 14)
+        textField.backgroundColor = .white
+        textField.borderStyle = .bezel
+        textField.autocorrectionType = .no
+        textField.isSecureTextEntry = true
+//        textField.textContentType = .oneTimeCode
+        textField.addTarget(self, action: #selector(validateFields), for: .editingChanged)
+        return textField
+    }()
     lazy var createButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Create", for: .normal)
@@ -62,14 +63,39 @@ class SignUpVc: UIViewController {
         setupSignUpStack()
     }
     @objc func validateFields() {
-           guard emailTextField.hasText, passwordTextField.hasText else {
-               createButton.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 0.5)
-               createButton.isEnabled = false
-               return
-           }
-           createButton.isEnabled = true
-           createButton.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
-       }
+        guard emailTextField.hasText, passwordTextField.hasText else {
+            createButton.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 0.5)
+            createButton.isEnabled = false
+            return
+        }
+        createButton.isEnabled = true
+        createButton.backgroundColor = UIColor(red: 255/255, green: 60/255, blue: 0/255, alpha: 1)
+    }
+    
+    @objc func trySignUp(){
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            showAlert(title: "Oops", message: "Please fill out all fields")
+            return
+        }
+        guard email.isValidEmail else {
+            showAlert(title: "Error", message: "Please enter a valid email")
+            return
+        }
+        guard password.isValidPassword else {
+            showAlert(title: "Error", message: "Please enter a valid password. Passwords must have at least 8 characters.")
+            return
+        }
+        
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertVC, animated: true)
+    }
+    
+    //MARK: - UI Constraints
+    
     private func setUpHeader() {
         view.addSubview(signUpHeader)
         signUpHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -80,16 +106,16 @@ class SignUpVc: UIViewController {
             signUpHeader.heightAnchor.constraint(equalToConstant: 50)])
     }
     private func setupSignUpStack() {
-            let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField,createButton])
-            stackView.axis = .vertical
-            stackView.spacing = 15
-            stackView.distribution = .fillEqually
-            self.view.addSubview(stackView)
-            stackView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField,createButton])
+        stackView.axis = .vertical
+        stackView.spacing = 15
+        stackView.distribution = .fillEqually
+        self.view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: signUpHeader.topAnchor, constant: 50),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             stackView.heightAnchor.constraint(equalToConstant: 130)])
-        }
+    }
 }

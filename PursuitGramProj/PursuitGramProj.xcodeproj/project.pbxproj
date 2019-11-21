@@ -17,6 +17,9 @@
 		50281BDF2383369B0022B9D9 /* PursuitGramProjTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BDE2383369B0022B9D9 /* PursuitGramProjTests.swift */; };
 		50281BEA238336C20022B9D9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 50281BE9238336C20022B9D9 /* GoogleService-Info.plist */; };
 		5040D99623849CB800D58D90 /* PursuitGramTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5040D99523849CB800D58D90 /* PursuitGramTabBarVC.swift */; };
+		506DF1022386E9A800C9654A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF1012386E9A800C9654A /* FirebaseAuthService.swift */; };
+		506DF1052386EA3600C9654A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF1042386EA3600C9654A /* User.swift */; };
+		506DF1072386EB4700C9654A /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF1062386EB4700C9654A /* FirestoreService.swift */; };
 		50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */; };
 		50EFDD5B2384A2BD00AFD6AD /* Email&PassCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD5A2384A2BD00AFD6AD /* Email&PassCheck.swift */; };
 		B688E8097E16FFE9B1244CA7 /* Pods_PursuitGramProj.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D249979781B3A0E9ACAD3D3C /* Pods_PursuitGramProj.framework */; };
@@ -49,6 +52,9 @@
 		50281BE02383369B0022B9D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50281BE9238336C20022B9D9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5040D99523849CB800D58D90 /* PursuitGramTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PursuitGramTabBarVC.swift; sourceTree = "<group>"; };
+		506DF1012386E9A800C9654A /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
+		506DF1042386EA3600C9654A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		506DF1062386EB4700C9654A /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginVC.swift; sourceTree = "<group>"; };
 		50EFDD5A2384A2BD00AFD6AD /* Email&PassCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Email&PassCheck.swift"; sourceTree = "<group>"; };
 		A2C1D74C6B35A2F0F435D516 /* Pods-PursuitGramProj.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PursuitGramProj.debug.xcconfig"; path = "Target Support Files/Pods-PursuitGramProj/Pods-PursuitGramProj.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +105,8 @@
 		50281BC62383369A0022B9D9 /* PursuitGramProj */ = {
 			isa = PBXGroup;
 			children = (
+				506DF1032386EA2100C9654A /* Model */,
+				506DF1002386E98E00C9654A /* Firebase */,
 				50EFDD592384A29100AFD6AD /* Utilities */,
 				5040D99423849BC700D58D90 /* Controllers */,
 				50281BC72383369A0022B9D9 /* AppDelegate.swift */,
@@ -145,6 +153,23 @@
 			children = (
 			);
 			path = Posts;
+			sourceTree = "<group>";
+		};
+		506DF1002386E98E00C9654A /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				506DF1012386E9A800C9654A /* FirebaseAuthService.swift */,
+				506DF1062386EB4700C9654A /* FirestoreService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		506DF1032386EA2100C9654A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				506DF1042386EA3600C9654A /* User.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		50EFDD592384A29100AFD6AD /* Utilities */ = {
@@ -343,10 +368,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				506DF1022386E9A800C9654A /* FirebaseAuthService.swift in Sources */,
+				506DF1072386EB4700C9654A /* FirestoreService.swift in Sources */,
 				50281BCC2383369A0022B9D9 /* ViewController.swift in Sources */,
 				501ABFE12385F3140048729D /* SignUpVc.swift in Sources */,
 				50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */,
 				50281BC82383369A0022B9D9 /* AppDelegate.swift in Sources */,
+				506DF1052386EA3600C9654A /* User.swift in Sources */,
 				50EFDD5B2384A2BD00AFD6AD /* Email&PassCheck.swift in Sources */,
 				5040D99623849CB800D58D90 /* PursuitGramTabBarVC.swift in Sources */,
 				50281BCA2383369A0022B9D9 /* SceneDelegate.swift in Sources */,
