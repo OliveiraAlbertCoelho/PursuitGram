@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class EditUserProfileVC: UIViewController {
     var settingFromLogin = false
@@ -62,6 +63,7 @@ class EditUserProfileVC: UIViewController {
         button.layer.shadowRadius = 2.0
         button.layer.shadowColor = UIColor.yellow.cgColor
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(addImagePressed), for: .touchUpInside)
         return button
     }()
         lazy var saveProfile: UIButton = {
@@ -71,6 +73,7 @@ class EditUserProfileVC: UIViewController {
               button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
               button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
               button.layer.cornerRadius = 5
+            button.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
         return button
         }()
     //MARK: - Objc funcs
@@ -83,6 +86,8 @@ class EditUserProfileVC: UIViewController {
             case .success():
                 FirestoreService.manager.updateCurrentUser { [weak self] (newResult) in
                     switch newResult {
+                    case .success():
+                    self?.handleNavigationAwayFromVC()
                     case .failure(let error):
                         print(error)
                     }
@@ -104,12 +109,41 @@ class EditUserProfileVC: UIViewController {
                       return
               }
               UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
-                  window.rootViewController = RedditTabBarViewController()
+                  window.rootViewController = PursuitGramTabBarVC()
               }, completion: nil)
           } else {
               self.navigationController?.popViewController(animated: true)
           }
       }
+    @objc private func addImagePressed(){
+        switch PHPhotoLibrary.authorizationStatus(){
+        case .notDetermined, .denied , .restricted:
+       PHPhotoLibrary.requestAuthorization({[weak self] status in
+                        switch status {
+                        case .authorized:
+                            self?.presentPhotoPickerController()
+                        case .denied:
+                            //MARK: TODO - set up more intuitive UI interaction
+                            print("Denied photo library permissions")
+                        default:
+                            //MARK: TODO - set up more intuitive UI interaction
+                            print("No usable status")
+                        }
+                    })
+                default:
+                    presentPhotoPickerController()
+                }
+            }
+    private func presentPhotoPickerController() {
+        DispatchQueue.main.async{
+            let imagePickerViewController = UIImagePickerController()
+            imagePickerViewController.delegate = self
+            imagePickerViewController.sourceType = .photoLibrary
+            imagePickerViewController.allowsEditing = true
+            imagePickerViewController.mediaTypes = ["public.image"]
+            self.present(imagePickerViewController, animated: true, completion: nil)
+        }
+    }
     
     //MARK: - UI Constraints
     private func addViews(){
@@ -159,3 +193,26 @@ class EditUserProfileVC: UIViewController {
       }
    
 }
+extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.editedImage] as? UIImage else {
+            return
+        }
+            self.image = image
+        guard let imageData = image.jpegData(compressionQuality: 1) else {
+                   return
+               }
+        
+  FirebaseStorageService.manager.storeImage(image: imageData, completion: { [weak self] (result) in
+                switch result{
+                case .success(let url):
+                    //Note - defer UI response, update user image url in auth and in firestore when save is pressed
+                    self?.imageURL = url
+                case .failure(let error):
+                    //MARK: TODO - defer image not save alert, try again later. maybe make VC "dirty" to allow user to move on in nav stack
+                    print(error)
+                }
+            })
+            dismiss(animated: true, completion: nil)
+        }
+    }

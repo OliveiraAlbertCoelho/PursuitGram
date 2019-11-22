@@ -24,6 +24,7 @@
 		506DF10C2386F37000C9654A /* UserProfileVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF10B2386F37000C9654A /* UserProfileVc.swift */; };
 		506DF10E238849EB00C9654A /* UserPostDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF10D238849EB00C9654A /* UserPostDetailVC.swift */; };
 		506DF11023884D6C00C9654A /* EditUserProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF10F23884D6C00C9654A /* EditUserProfileVC.swift */; };
+		506DF11223886AC800C9654A /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506DF11123886AC800C9654A /* FirebaseStorage.swift */; };
 		50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */; };
 		50EFDD5B2384A2BD00AFD6AD /* Email&PassCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EFDD5A2384A2BD00AFD6AD /* Email&PassCheck.swift */; };
 		B688E8097E16FFE9B1244CA7 /* Pods_PursuitGramProj.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D249979781B3A0E9ACAD3D3C /* Pods_PursuitGramProj.framework */; };
@@ -63,6 +64,7 @@
 		506DF10B2386F37000C9654A /* UserProfileVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileVc.swift; sourceTree = "<group>"; };
 		506DF10D238849EB00C9654A /* UserPostDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostDetailVC.swift; sourceTree = "<group>"; };
 		506DF10F23884D6C00C9654A /* EditUserProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserProfileVC.swift; sourceTree = "<group>"; };
+		506DF11123886AC800C9654A /* FirebaseStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		50EFDD572384A0B300AFD6AD /* UserLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginVC.swift; sourceTree = "<group>"; };
 		50EFDD5A2384A2BD00AFD6AD /* Email&PassCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Email&PassCheck.swift"; sourceTree = "<group>"; };
 		A2C1D74C6B35A2F0F435D516 /* Pods-PursuitGramProj.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PursuitGramProj.debug.xcconfig"; path = "Target Support Files/Pods-PursuitGramProj/Pods-PursuitGramProj.debug.xcconfig"; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				506DF1012386E9A800C9654A /* FirebaseAuthService.swift */,
 				506DF1062386EB4700C9654A /* FirestoreService.swift */,
+				506DF11123886AC800C9654A /* FirebaseStorage.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				506DF11023884D6C00C9654A /* EditUserProfileVC.swift in Sources */,
 				506DF10C2386F37000C9654A /* UserProfileVc.swift in Sources */,
 				50EFDD5B2384A2BD00AFD6AD /* Email&PassCheck.swift in Sources */,
+				506DF11223886AC800C9654A /* FirebaseStorage.swift in Sources */,
 				5040D99623849CB800D58D90 /* PursuitGramTabBarVC.swift in Sources */,
 				506DF10E238849EB00C9654A /* UserPostDetailVC.swift in Sources */,
 				50281BCA2383369A0022B9D9 /* SceneDelegate.swift in Sources */,
