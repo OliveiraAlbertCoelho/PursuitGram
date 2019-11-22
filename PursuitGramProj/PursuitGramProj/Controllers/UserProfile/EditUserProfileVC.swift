@@ -9,13 +9,23 @@
 import UIKit
 
 class EditUserProfileVC: UIViewController {
-    var user: AppUser!
-       var isCurrentUser = false
+    var settingFromLogin = false
+    var imageURL: URL? = nil
+    var isCurrentUser = false
+    
+    var image = UIImage() {
+           didSet {
+               self.profileImage.image = image
+           }
+       }
+       
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         addViews()
     }
+    //MARK: UI Objects
     lazy var profileLabel: UILabel = {
         let label = UILabel()
         label.text = "Profile"
@@ -63,7 +73,43 @@ class EditUserProfileVC: UIViewController {
               button.layer.cornerRadius = 5
         return button
         }()
+    //MARK: - Objc funcs
+    @objc private func savePressed(){
+        guard let userText = userName.text, let imageURL = imageURL else {
+            return
+        }
+        FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: imageURL) { (result) in
+            switch result{
+            case .success():
+                FirestoreService.manager.updateCurrentUser { [weak self] (newResult) in
+                    switch newResult {
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+        }
+        
+    }
+    }
     
+    private func handleNavigationAwayFromVC() {
+          if settingFromLogin {
+              //MARK: TODO - refactor this logic into scene delegate
+              guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
+                  else {
+                      //MARK: TODO - handle could not swap root view controller
+                      return
+              }
+              UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
+                  window.rootViewController = RedditTabBarViewController()
+              }, completion: nil)
+          } else {
+              self.navigationController?.popViewController(animated: true)
+          }
+      }
     
     //MARK: - UI Constraints
     private func addViews(){
