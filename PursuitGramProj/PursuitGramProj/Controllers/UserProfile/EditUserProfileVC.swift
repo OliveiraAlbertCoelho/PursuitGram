@@ -28,6 +28,7 @@ class EditUserProfileVC: UIViewController {
           let image = UIImageView()
            image.backgroundColor = .gray
            image.image = UIImage(systemName: "person")
+            image.layer.cornerRadius = 15
            return image
        }()
        lazy var userName: UITextField = {
@@ -36,7 +37,7 @@ class EditUserProfileVC: UIViewController {
            textField.font = UIFont(name: "Verdana", size: 14)
            textField.backgroundColor = .white
            textField.borderStyle = .bezel
-           textField.layer.cornerRadius = 5
+           textField.layer.cornerRadius = 15
            textField.autocorrectionType = .no
            return textField
        }()
@@ -47,6 +48,9 @@ class EditUserProfileVC: UIViewController {
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
         button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
         button.layer.cornerRadius = 30
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowRadius = 2.0
+        button.layer.shadowColor = UIColor.yellow.cgColor
         button.clipsToBounds = true
         return button
     }()
@@ -64,7 +68,9 @@ class EditUserProfileVC: UIViewController {
     //MARK: - UI Constraints
     private func addViews(){
         constrainProfileLabel()
+        constrainImageView()
         constrainAddImageButton()
+        constrainUserName()
     }
     private func constrainProfileLabel() {
         view.addSubview(profileLabel)
@@ -79,22 +85,31 @@ class EditUserProfileVC: UIViewController {
            view.addSubview(profileImage)
                   profileImage.translatesAutoresizingMaskIntoConstraints = false
                   NSLayoutConstraint.activate([
-                      profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 180),
-                      profileImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -180),
-                      profileImage.topAnchor.constraint(equalTo: profileLabel.safeAreaLayoutGuide.bottomAnchor),
-                      profileImage.heightAnchor.constraint(equalToConstant: 60),
-                      profileImage.widthAnchor.constraint(equalToConstant: 60)])
+                      profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100),
+                      profileImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
+                      profileImage.topAnchor.constraint(equalTo: profileLabel.bottomAnchor, constant: 100),
+                      profileImage.heightAnchor.constraint(equalToConstant: 200),
+                      profileImage.widthAnchor.constraint(equalToConstant: 200)])
        }
     private func constrainAddImageButton(){
         view.addSubview(addImage)
           addImage.translatesAutoresizingMaskIntoConstraints = false
           NSLayoutConstraint.activate([
-              addImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 180),
-              addImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -180),
-              addImage.topAnchor.constraint(equalTo: profileLabel.safeAreaLayoutGuide.bottomAnchor),
+            addImage.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -40),
+              addImage.bottomAnchor.constraint(equalTo: profileImage.topAnchor, constant: 40),
               addImage.heightAnchor.constraint(equalToConstant: 60),
               addImage.widthAnchor.constraint(equalToConstant: 60)])
             
     }
+    private func constrainUserName(){
+          view.addSubview(userName)
+            userName.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+              userName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100),
+              userName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
+              userName.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 40),
+                userName.heightAnchor.constraint(equalToConstant: 40),
+               ])
+      }
    
 }
