@@ -21,7 +21,7 @@ class FirestoreService {
     private let db = Firestore.firestore()
     
     //MARK: AppUsers
-    func createAppUser(user: AppUser, completion: @escaping (Result<(), Error>) -> ()) {
+    func SaveUser(user: AppUser, completion: @escaping (Result<(), Error>) -> ()) {
         var fields = user.fieldsDict
         fields["dateCreated"] = Date()
         db.collection(FireStoreCollections.users.rawValue).document(user.uid).setData(fields) { (error) in

@@ -13,9 +13,9 @@ extension String {
         return emailPredicate.evaluate(with: self)
     }
     var isValidPassword: Bool {
-        
         let validPasswordRegEx =  "[A-Z0-9a-z!@#$&*.-]{8,}"
         let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", validPasswordRegEx)
         return passwordPredicate.evaluate(with: self)
+        
     }
 }

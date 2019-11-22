@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SignUpVc: UIViewController {
     //MARK: - lifecycle methods
@@ -44,7 +45,7 @@ class SignUpVc: UIViewController {
         textField.borderStyle = .bezel
         textField.autocorrectionType = .no
         textField.isSecureTextEntry = true
-//        textField.textContentType = .oneTimeCode
+        textField.textContentType = .oneTimeCode
         textField.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return textField
     }()
@@ -56,6 +57,7 @@ class SignUpVc: UIViewController {
         button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
         button.layer.cornerRadius = 5
         button.isEnabled = false
+        button.addTarget(self, action: #selector(trySignUp), for: .touchUpInside)
         return button
     }()
     private func setUpUIObjects(){
@@ -85,9 +87,55 @@ class SignUpVc: UIViewController {
             showAlert(title: "Error", message: "Please enter a valid password. Passwords must have at least 8 characters.")
             return
         }
-        
-    }
-    
+     FirebaseAuthService.manager.createNewUser(email: email.lowercased(), password: password) { [weak self] (result) in
+                   self?.handleCreateAccountResponse(with: result)
+               }
+           }
+           
+           //MARK: Private methods
+           
+           private func showAlert(with title: String, and message: String) {
+               let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+               alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+               present(alertVC, animated: true, completion: nil)
+           }
+           private func handleCreateAccountResponse(with result: Result<User, Error>) {
+               DispatchQueue.main.async { [weak self] in
+                   switch result {
+                   case .success(let user):
+                       FirestoreService.manager.SaveUser(user: AppUser(from: user)) { [weak self] newResult in
+                           self?.handleCreatedUserInFirestore(result: newResult)
+                       }
+                   case .failure(let error):
+                       self?.showAlert(with: "Error creating user", and: "An error occured while creating new account \(error)")
+                   }
+               }
+           }
+           
+           private func handleCreatedUserInFirestore(result: Result<(), Error>) {
+               switch result {
+               case .success:
+                   guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                       let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
+                       else {
+                           //MARK: TODO - handle could not swap root view controller
+                           return
+                   }
+                   //MARK: TODO - refactor this logic into scene delegate
+                   UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
+                       if FirebaseAuthService.manager.currentUser?.photoURL != nil {
+                           window.rootViewController = PursuitGramTabBarVC()
+                       } else {
+                           window.rootViewController = {
+                            let profileSetupVC = PursuitGramTabBarVC()
+                            return profileSetupVC
+                           }()
+                       }
+                   }, completion: nil)
+               case .failure(let error):
+                   self.showAlert(with: "Error creating user", and: "An error occured while creating new account \(error)")
+               }
+           }
     private func showAlert(title: String, message: String) {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

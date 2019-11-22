@@ -26,6 +26,7 @@ class FirebaseAuthService {
                 completion(.failure(error))
             }
         }
+        
     }
     
 //    func updateUserFields(userName: String? = nil,photoURL: URL? = nil, completion: @escaping (Result<(),Error>) -> ()){

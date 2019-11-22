@@ -50,6 +50,7 @@ class UserLoginVC: UIViewController {
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
         button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
         button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
         return button
     }()
     lazy var createAccount: UIButton = {
@@ -65,12 +66,66 @@ class UserLoginVC: UIViewController {
         return button
     }()
     
-    // MARK: - VC functions and constraints
+
+ //MARK: - Objc functions
+    @objc func loginAction(){
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+                showAlert(title: "Error", message: "Please fill out all fields.")
+                return
+            }
+            //MARK: TODO - remove whitespace (if any) from email/password
+            guard email.isValidEmail else {
+                showAlert(title: "Error", message: "Please enter a valid email")
+                return
+            }
+            guard password.isValidPassword else {
+                showAlert(title: "Error", message: "Please enter a valid password. Passwords must have at least 8 characters.")
+                return
+            }
+            
+            FirebaseAuthService.manager.loginUser(email: email.lowercased(), password: password) { (result) in
+                self.handleLoginResponse(with: result)
+            }
+        }
+    @objc func showSignUp() {
+          let signupVC = SignUpVc()
+          signupVC.modalPresentationStyle = .formSheet
+          present(signupVC, animated: true, completion: nil)
+      }
+    
+    
+    //MARK: Regular VC functions
     private func setupSubViews() {
-         setupPursuitGramLogo()
-         setupCreateAccountButton()
-         setupLoginStack()
-     }
+          setupPursuitGramLogo()
+          setupCreateAccountButton()
+          setupLoginStack()
+      }
+     
+    private func handleLoginResponse(with result: Result<(), Error>) {
+        switch result {
+        case .failure(let error):
+            showAlert(title: "Error", message: "Could not log in. Error: \(error)")
+        case .success:
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
+                else {
+                    //MARK: TODO - handle could not swap root view controller
+                    return
+            }
+            //MARK: TODO - refactor this logic into scene delegate
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
+                window.rootViewController = UserPostsVC()
+            }, completion: nil)
+        }
+    }
+    
+private func showAlert(title: String, message: String) {
+       let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+       alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+       present(alertVC, animated: true)
+   }
+        
+    //MARK: - UI Constraints
     private func setupPursuitGramLogo() {
          view.addSubview(pursuitGramLogo)
          pursuitGramLogo.translatesAutoresizingMaskIntoConstraints = false
@@ -79,11 +134,7 @@ class UserLoginVC: UIViewController {
              pursuitGramLogo.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
              pursuitGramLogo.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16)])
      }
-    @objc func showSignUp() {
-        let signupVC = SignUpVc()
-        signupVC.modalPresentationStyle = .formSheet
-        present(signupVC, animated: true, completion: nil)
-    }
+
     private func setupLoginStack() {
          let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField,loginButton])
          stackView.axis = .vertical
