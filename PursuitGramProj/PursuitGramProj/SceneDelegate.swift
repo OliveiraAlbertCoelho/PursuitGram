@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -21,7 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
          window?.windowScene = scene
         
-         window?.rootViewController = UserLoginVC()
+        if FirebaseAuthService.manager.currentUser != nil{
+           window?.rootViewController = PursuitGramTabBarVC()
+        }else {
+             window?.rootViewController = UserLoginVC()
+        }
          window?.makeKeyAndVisible()
     }
 

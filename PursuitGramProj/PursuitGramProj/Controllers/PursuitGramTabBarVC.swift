@@ -12,14 +12,14 @@ class PursuitGramTabBarVC: UITabBarController {
 
     lazy var postsVC = UINavigationController(rootViewController: UserPostsVC())
       lazy var profileVC: UINavigationController = {
-          let userProfileVC = UserProfileVc()
+          let userProfileVC = EditUserProfileVC()
           userProfileVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
           userProfileVC.isCurrentUser = true
           return UINavigationController(rootViewController: userProfileVC)
       }()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         postsVC.tabBarItem = UITabBarItem(title: "Posts", image: UIImage(systemName: "list.dash"), tag: 0)
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.crop.square"), tag: 2)
         self.viewControllers = [postsVC,profileVC]
