@@ -10,10 +10,7 @@ import UIKit
 import Photos
 
 class EditUserProfileVC: UIViewController {
-    var settingFromLogin = false
     var imageURL: URL? = nil
-    var isCurrentUser = false
-    
     var image = UIImage() {
            didSet {
                self.profileImage.image = image
@@ -79,6 +76,7 @@ class EditUserProfileVC: UIViewController {
     //MARK: - Objc funcs
     @objc private func savePressed(){
         guard let userText = userName.text, let imageURL = imageURL else {
+            print("error")
             return
         }
         FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: imageURL) { (result) in
@@ -87,7 +85,7 @@ class EditUserProfileVC: UIViewController {
                 FirestoreService.manager.updateCurrentUser { [weak self] (newResult) in
                     switch newResult {
                     case .success():
-                    self?.handleNavigationAwayFromVC()
+                        self?.navigationController?.popViewController(animated: true)
                     case .failure(let error):
                         print(error)
                     }
@@ -98,23 +96,6 @@ class EditUserProfileVC: UIViewController {
         
     }
     }
-    
-    private func handleNavigationAwayFromVC() {
-          if settingFromLogin {
-              //MARK: TODO - refactor this logic into scene delegate
-              guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
-                  else {
-                      //MARK: TODO - handle could not swap root view controller
-                      return
-              }
-              UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
-                  window.rootViewController = PursuitGramTabBarVC()
-              }, completion: nil)
-          } else {
-              self.navigationController?.popViewController(animated: true)
-          }
-      }
     @objc private func addImagePressed(){
         switch PHPhotoLibrary.authorizationStatus(){
         case .notDetermined, .denied , .restricted:
@@ -151,6 +132,7 @@ class EditUserProfileVC: UIViewController {
         constrainImageView()
         constrainAddImageButton()
         constrainUserName()
+        constrainSaveButton()
     }
     private func constrainProfileLabel() {
         view.addSubview(profileLabel)
@@ -191,6 +173,17 @@ class EditUserProfileVC: UIViewController {
                 userName.heightAnchor.constraint(equalToConstant: 40),
                ])
       }
+    private func constrainSaveButton(){
+           view.addSubview(saveProfile)
+             saveProfile.translatesAutoresizingMaskIntoConstraints = false
+             NSLayoutConstraint.activate([
+               saveProfile.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100),
+               saveProfile.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
+               saveProfile.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 40),
+                 saveProfile.heightAnchor.constraint(equalToConstant: 40),
+                ])
+       }
+    
    
 }
 extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -203,7 +196,7 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
                    return
                }
         
-  FirebaseStorageService.manager.storeImage(image: imageData, completion: { [weak self] (result) in
+  FirebaseStorage.manager.storeImage(image: imageData, completion: { [weak self] (result) in
                 switch result{
                 case .success(let url):
                     //Note - defer UI response, update user image url in auth and in firestore when save is pressed

@@ -14,16 +14,24 @@ class UserProfileVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-   
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    lazy var userImage: UIImageView = {
+      let user = UIImageView()
+      user.backgroundColor = .gray
+      user.image = UIImage(systemName: "person")
+      user.layer.cornerRadius = 15
+    return user
+    }()
+    lazy var userName: UILabel = {
+    let label = UILabel()
+        label.text = "UserName not set"
+    return label
+    }()
+    lazy var totalPost: UILabel = {
+    let label = UILabel()
+    label.text = "0 \n Posts"
+    label.numberOfLines = 0
+    
+    return label
+    }()
+    
 }

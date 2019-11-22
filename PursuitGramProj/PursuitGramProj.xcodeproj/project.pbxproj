@@ -11,7 +11,6 @@
 		501ABFE12385F3140048729D /* SignUpVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501ABFE02385F3140048729D /* SignUpVc.swift */; };
 		50281BC82383369A0022B9D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BC72383369A0022B9D9 /* AppDelegate.swift */; };
 		50281BCA2383369A0022B9D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BC92383369A0022B9D9 /* SceneDelegate.swift */; };
-		50281BCC2383369A0022B9D9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BCB2383369A0022B9D9 /* ViewController.swift */; };
 		50281BD12383369B0022B9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50281BD02383369B0022B9D9 /* Assets.xcassets */; };
 		50281BD42383369B0022B9D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50281BD22383369B0022B9D9 /* LaunchScreen.storyboard */; };
 		50281BDF2383369B0022B9D9 /* PursuitGramProjTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50281BDE2383369B0022B9D9 /* PursuitGramProjTests.swift */; };
@@ -48,7 +47,6 @@
 		50281BC42383369A0022B9D9 /* PursuitGramProj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PursuitGramProj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50281BC72383369A0022B9D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50281BC92383369A0022B9D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		50281BCB2383369A0022B9D9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		50281BD02383369B0022B9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		50281BD32383369B0022B9D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		50281BD52383369B0022B9D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,10 +117,7 @@
 				506DF1002386E98E00C9654A /* Firebase */,
 				50EFDD592384A29100AFD6AD /* Utilities */,
 				5040D99423849BC700D58D90 /* Controllers */,
-				50281BC72383369A0022B9D9 /* AppDelegate.swift */,
 				50281BC92383369A0022B9D9 /* SceneDelegate.swift */,
-				50281BCB2383369A0022B9D9 /* ViewController.swift */,
-				50281BD02383369B0022B9D9 /* Assets.xcassets */,
 				50281BD22383369B0022B9D9 /* LaunchScreen.storyboard */,
 				50281BE9238336C20022B9D9 /* GoogleService-Info.plist */,
 				50281BD52383369B0022B9D9 /* Info.plist */,
@@ -199,6 +194,8 @@
 			isa = PBXGroup;
 			children = (
 				50EFDD5A2384A2BD00AFD6AD /* Email&PassCheck.swift */,
+				50281BC72383369A0022B9D9 /* AppDelegate.swift */,
+				50281BD02383369B0022B9D9 /* Assets.xcassets */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -393,7 +390,6 @@
 			files = (
 				506DF1022386E9A800C9654A /* FirebaseAuthService.swift in Sources */,
 				506DF1072386EB4700C9654A /* FirestoreService.swift in Sources */,
-				50281BCC2383369A0022B9D9 /* ViewController.swift in Sources */,
 				501ABFE12385F3140048729D /* SignUpVc.swift in Sources */,
 				50EFDD582384A0B300AFD6AD /* UserLoginVC.swift in Sources */,
 				50281BC82383369A0022B9D9 /* AppDelegate.swift in Sources */,
