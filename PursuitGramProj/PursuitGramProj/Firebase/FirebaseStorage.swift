@@ -9,16 +9,27 @@
 import Foundation
 import FirebaseStorage
 
+enum typeOfReference{
+    case post
+    case profile
+}
 class FirebaseStorage {
-        static var manager = FirebaseStorage()
+    static var profilemanager = FirebaseStorage(type: .profile)
+    static var postManager = FirebaseStorage(type: .post)
         private let storage: Storage!
         private let storageReference: StorageReference
         private let imagesFolderReference: StorageReference
         
-        init() {
+    init(type: typeOfReference) {
             storage = Storage.storage()
             storageReference = storage.reference()
-            imagesFolderReference = storageReference.child("profileImage")
+        switch type {
+        case .post:
+             imagesFolderReference = storageReference.child("postImage")
+        case .profile:
+              imagesFolderReference = storageReference.child("profileImage")
+        }
+          
         }
         
         func storeImage(image: Data,  completion: @escaping (Result<URL,Error>) -> ()) {

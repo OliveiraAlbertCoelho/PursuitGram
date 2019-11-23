@@ -10,6 +10,7 @@ import UIKit
 import Photos
 class CreatePostVC: UIViewController {
     var imageURL: URL? = nil
+    var currentUser = FirebaseAuthService.manager.currentUser
     var image = UIImage() {
            didSet {
                self.postImage.image = image
@@ -34,12 +35,11 @@ class CreatePostVC: UIViewController {
 
     }()
     lazy var shareButton: UIBarButtonItem = {
-            let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: self, action: #selector(shareAction))
+            let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.save, target: self, action: #selector(shareAction))
            return button
        }()
        
     @objc private func addImagePressed(){
-     
          switch PHPhotoLibrary.authorizationStatus(){
          case .notDetermined, .denied , .restricted:
              PHPhotoLibrary.requestAuthorization({[weak self] status in
@@ -69,6 +69,20 @@ class CreatePostVC: UIViewController {
       }
     
        @objc func shareAction(){
+        guard let image = imageURL?.absoluteString, let user = currentUser?.uid else{
+            return
+        }
+     
+        let post = Post(creatorID: user , dateCreated: nil, imageUrl: image )
+        FirestoreService.manager.createPost(post: post) { (result) in
+            switch result{
+            case .success(()):
+            print("yeah")
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
         
        }
     private func setupViews(){
@@ -111,12 +125,11 @@ extension CreatePostVC: UIImagePickerControllerDelegate, UINavigationControllerD
                return
            }
            
-           FirebaseStorage.manager.storeImage(image: imageData, completion: { [weak self] (result) in
+        FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
                switch result{
                case .success(let url):
                    //Note - defer UI response, update user image url in auth and in firestore when save is pressed
                    self?.imageURL = url
-                   print("ahhh")
                case .failure(let error):
                    //MARK: TODO - defer image not save alert, try again later. maybe make VC "dirty" to allow user to move on in nav stack
                    print(error)

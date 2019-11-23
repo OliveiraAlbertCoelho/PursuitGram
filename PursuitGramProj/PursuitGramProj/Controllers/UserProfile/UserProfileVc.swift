@@ -118,7 +118,7 @@ class UserProfileVc: UIViewController {
            return
         }
         DispatchQueue.main.async {
-            FirebaseStorage.manager.getProfileImage(profileUrl: photo) { (result) in
+            FirebaseStorage.profilemanager.getProfileImage(profileUrl: photo) { (result) in
                 switch result{
                 case .failure(let error):
                     print(error)

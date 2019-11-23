@@ -80,7 +80,6 @@ class EditUserProfileVC: UIViewController {
             return
         }
         DispatchQueue.main.async {
-            
             FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: imageURL) { (result) in
                 switch result{
                 case .success():
@@ -198,7 +197,7 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
             return
         }
         
-        FirebaseStorage.manager.storeImage(image: imageData, completion: { [weak self] (result) in
+        FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
             switch result{
             case .success(let url):
                 //Note - defer UI response, update user image url in auth and in firestore when save is pressed
