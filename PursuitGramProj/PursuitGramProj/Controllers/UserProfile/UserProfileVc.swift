@@ -17,7 +17,8 @@ class UserProfileVc: UIViewController {
         postCollectionView.delegate = self
         postCollectionView.dataSource = self
         setUpView()
-      
+        loadProfileImage()
+        print(user.userName)
     }
   
     
@@ -49,7 +50,11 @@ class UserProfileVc: UIViewController {
         button.setTitle("Edit profile", for: .normal)
         button.tintColor = .orange
         button.backgroundColor = .black
+        button.isHidden = true
         button.addTarget(self, action: #selector(editAction), for: .touchUpInside)
+        if isCurrentUser {
+            button.isHidden = false
+        }
         return button
     }()
   
@@ -61,19 +66,41 @@ class UserProfileVc: UIViewController {
           cv.backgroundColor = .gray
           return cv
       }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(true)
+           user = AppUser(from: FirebaseAuthService.manager.currentUser!)
+        
+           loadProfileImage()
+       }
+    
+    
     @objc private func editAction(){
         let editVC = EditUserProfileVC()
-        editVC.modalPresentationStyle = .fullScreen
-        present(editVC, animated: true, completion: nil)
+         self.navigationController?.pushViewController(editVC, animated: true)
     }
     private func setUpView(){
         constrainProfileImage()
-          constrainTotalPost()
+        constrainTotalPost()
         constrainUserName()
         constrainEditButton()
         constrainCollectionView()
     }
+    private func loadProfileImage(){
+        self.userName.text = self.user.userName
+        DispatchQueue.main.async {
+            FirebaseStorage.manager.getProfileImage(profileUrl: self.user.photoURL!) { (result) in
+            switch result{
+            case .failure(let error):
+                print(error)
+            case .success(let data):
+                self.profileImage.image = UIImage(data: data)
+             
+            }
+        }
+        }}
  
+   
     
     private func constrainProfileImage(){
         view.addSubview(profileImage)

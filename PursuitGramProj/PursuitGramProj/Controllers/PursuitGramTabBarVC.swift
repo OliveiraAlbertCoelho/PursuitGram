@@ -13,8 +13,8 @@ class PursuitGramTabBarVC: UITabBarController {
     lazy var postsVC = UINavigationController(rootViewController: UserPostsVC())
       lazy var profileVC: UINavigationController = {
           let userProfileVC = UserProfileVc()
-                 userProfileVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
-                 userProfileVC.isCurrentUser = true
+           userProfileVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
+           userProfileVC.isCurrentUser = true
           return UINavigationController(rootViewController: userProfileVC)
       }()
     override func viewDidLoad() {
