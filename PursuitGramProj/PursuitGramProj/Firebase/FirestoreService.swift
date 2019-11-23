@@ -64,5 +64,32 @@ class FirestoreService {
              }
          }
      }
-    
+    func getAllPost(completion: @escaping (Result<[Post], Error>) -> ()){
+        db.collection(FireStoreCollections.posts.rawValue).getDocuments {(snapshot, error) in
+            if let error = error{
+                completion(.failure(error))
+            }else {
+                let posts = snapshot?.documents.compactMap({ (snapshot) -> Post? in
+                    let postID = snapshot.documentID
+                    let post = Post(from: snapshot.data(), id: postID)
+                    return post
+                })
+                completion(.success(posts ?? []))
+                }
+    }
+    }
+    func getUserPosts(for UserID: String, completion: @escaping (Result<[Post],Error>) ->()) {
+        db.collection(FireStoreCollections.posts.rawValue).whereField("creatorID", isEqualTo: UserID).getDocuments { (snapshot, error) in
+            if let error = error{
+                completion(.failure(error))
+            }else {
+                let posts = snapshot?.documents.compactMap({ (snapshot) -> Post? in
+                    let postID = snapshot.documentID
+                    let post = Post(from: snapshot.data(), id: postID)
+                    return post
+                })
+                completion(.success(posts ?? []))
+            }
+        }
+    }
 }

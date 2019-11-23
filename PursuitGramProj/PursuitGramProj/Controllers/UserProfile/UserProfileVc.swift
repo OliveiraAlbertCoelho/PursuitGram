@@ -12,6 +12,11 @@ import FirebaseFirestore
 class UserProfileVc: UIViewController {
     var user: AppUser!
     var isCurrentUser = false
+    var posts: [Post]{
+        didSet{
+            postCollectionView.reloadData()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -138,7 +143,6 @@ class UserProfileVc: UIViewController {
             profileImage.heightAnchor.constraint(equalToConstant: 150),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             profileImage.widthAnchor.constraint(equalToConstant: 150)
-            
         ])
     }
     private func constrainTotalPost(){
