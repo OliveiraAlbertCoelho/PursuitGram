@@ -114,7 +114,7 @@ class UserLoginVC: UIViewController {
             }
             //MARK: TODO - refactor this logic into scene delegate
             UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
-                window.rootViewController = EditUserProfileVC()
+                window.rootViewController = PursuitGramTabBarVC()
             }, completion: nil)
         }
     }

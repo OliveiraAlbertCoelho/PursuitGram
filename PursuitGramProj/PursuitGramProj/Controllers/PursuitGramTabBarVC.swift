@@ -10,7 +10,8 @@ import UIKit
 
 class PursuitGramTabBarVC: UITabBarController {
 
-    lazy var postsVC = UINavigationController(rootViewController: UserPostsVC())
+    lazy var postsVC = UINavigationController(rootViewController: FeedVc())
+    lazy var addPostVC = UINavigationController(rootViewController: CreatePostVC())
       lazy var profileVC: UINavigationController = {
           let userProfileVC = UserProfileVc()
            userProfileVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
@@ -19,11 +20,10 @@ class PursuitGramTabBarVC: UITabBarController {
       }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        postsVC.tabBarItem = UITabBarItem(title: "Posts", image: UIImage(systemName: "list.dash"), tag: 0)
+        addPostVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "camera"), tag: 0)
+        postsVC.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "list.dash"), tag: 0)
         profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.crop.square"), tag: 2)
-        self.viewControllers = [postsVC,profileVC]
-
+        self.viewControllers = [postsVC,addPostVC,profileVC]
     }
     
 

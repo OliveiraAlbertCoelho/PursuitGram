@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import FirebaseAuth
+import FirebaseFirestore
 class UserProfileVc: UIViewController {
     var user: AppUser!
     var isCurrentUser = false
@@ -18,20 +19,25 @@ class UserProfileVc: UIViewController {
         postCollectionView.dataSource = self
         setUpView()
         loadProfileImage()
-        print(user.userName)
+        navigationItem.rightBarButtonItem = logOutButton
     }
-  
+    
     
     lazy var profileImage: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .gray
-        image.image = UIImage(contentsOfFile: user!.photoURL!) ?? UIImage(systemName: "person")
-        image.layer.cornerRadius = 15
+        if let photo = user.photoURL{
+            image.image = UIImage(contentsOfFile: (photo))
+        }else {
+            image.image = UIImage(systemName: "person")
+        }
         
+        image.layer.cornerRadius = 15
         return image
     }()
     lazy var userName: UILabel = {
         let label = UILabel()
+        
         label.text = user.userName ?? "User not found"
         label.textAlignment = .left
         label.textColor = .black
@@ -44,7 +50,26 @@ class UserProfileVc: UIViewController {
         label.textAlignment = .center
         return label
     }()
+    lazy var logOutButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: self, action: #selector(logOut))
+        return button
+    }()
     
+    @objc func logOut (){
+        DispatchQueue.main.async {
+            FirebaseAuthService.manager.logOut { (result) in
+                
+            }
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
+                else {
+                    return
+            }
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromBottom, animations: {
+                window.rootViewController = UserLoginVC()
+            }, completion: nil)
+        }
+    }
     lazy var editButton: UIButton = {
         let button = UIButton()
         button.setTitle("Edit profile", for: .normal)
@@ -57,27 +82,27 @@ class UserProfileVc: UIViewController {
         }
         return button
     }()
-  
+    
     lazy var postCollectionView: UICollectionView = {
-          let layout = UICollectionViewFlowLayout()
-          layout.scrollDirection = .vertical
-          let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-          cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
-          cv.backgroundColor = .gray
-          return cv
-      }()
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
+        cv.backgroundColor = .gray
+        return cv
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(true)
-           user = AppUser(from: FirebaseAuthService.manager.currentUser!)
-        
-           loadProfileImage()
-       }
+        super.viewWillAppear(true)
+        user = AppUser(from: FirebaseAuthService.manager.currentUser!)
+        loadProfileImage()
+    }
     
     
     @objc private func editAction(){
         let editVC = EditUserProfileVC()
-         self.navigationController?.pushViewController(editVC, animated: true)
+        editVC.profileImage.image = profileImage.image
+        self.navigationController?.pushViewController(editVC, animated: true)
     }
     private func setUpView(){
         constrainProfileImage()
@@ -86,21 +111,24 @@ class UserProfileVc: UIViewController {
         constrainEditButton()
         constrainCollectionView()
     }
+    
     private func loadProfileImage(){
         self.userName.text = self.user.userName
-        DispatchQueue.main.async {
-            FirebaseStorage.manager.getProfileImage(profileUrl: self.user.photoURL!) { (result) in
-            switch result{
-            case .failure(let error):
-                print(error)
-            case .success(let data):
-                self.profileImage.image = UIImage(data: data)
-             
-            }
+        guard let photo = self.user.photoURL else {
+           return
         }
+        DispatchQueue.main.async {
+            FirebaseStorage.manager.getProfileImage(profileUrl: photo) { (result) in
+                switch result{
+                case .failure(let error):
+                    print(error)
+                case .success(let data):
+                    self.profileImage.image = UIImage(data: data)
+                }
+            }
         }}
- 
-   
+    
+    
     
     private func constrainProfileImage(){
         view.addSubview(profileImage)
@@ -111,7 +139,7 @@ class UserProfileVc: UIViewController {
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             profileImage.widthAnchor.constraint(equalToConstant: 150)
             
-      ])
+        ])
     }
     private func constrainTotalPost(){
         view.addSubview(totalPost)
@@ -121,7 +149,7 @@ class UserProfileVc: UIViewController {
             totalPost.heightAnchor.constraint(equalToConstant: 60),
             totalPost.topAnchor.constraint(equalTo: profileImage.topAnchor, constant: 10),
             totalPost.widthAnchor.constraint(equalToConstant: 150)
-      ])
+        ])
     }
     private func constrainUserName(){
         view.addSubview(userName)
@@ -131,18 +159,18 @@ class UserProfileVc: UIViewController {
             userName.heightAnchor.constraint(equalToConstant: 30),
             userName.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 10),
             userName.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-      ])
+        ])
     }
     private func constrainEditButton(){
-             view.addSubview(editButton)
-              editButton.translatesAutoresizingMaskIntoConstraints = false
-              NSLayoutConstraint.activate([
-                  editButton.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 0),
-                  editButton.heightAnchor.constraint(equalToConstant: 30),
-                  editButton.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
-                  editButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
-            ])
-       }
+        view.addSubview(editButton)
+        editButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            editButton.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 0),
+            editButton.heightAnchor.constraint(equalToConstant: 30),
+            editButton.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
+            editButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+        ])
+    }
     private func constrainCollectionView(){
         view.addSubview(postCollectionView)
         postCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -151,10 +179,10 @@ class UserProfileVc: UIViewController {
             postCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             postCollectionView.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 60),
             postCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
-      ])
+        ])
     }
     
-
+    
 }
 extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -172,10 +200,10 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
         
     }
     
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-   
+    
     
 }

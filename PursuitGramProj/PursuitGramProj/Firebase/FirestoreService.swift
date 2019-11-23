@@ -12,14 +12,11 @@ import FirebaseFirestore
 enum FireStoreCollections: String {
     case users
     case posts
-    case comments
 }
 
 class FirestoreService {
     static let manager = FirestoreService()
-    
     private let db = Firestore.firestore()
-    
     //MARK: AppUsers
     func SaveUser(user: AppUser, completion: @escaping (Result<(), Error>) -> ()) {
         var fields = user.fieldsDict
@@ -56,5 +53,16 @@ class FirestoreService {
             
         }
     }
+    func createPost(post: Post, completion: @escaping (Result<(), Error>) -> ()) {
+         var fields = post.fieldsDict
+         fields["dateCreated"] = Date()
+         db.collection(FireStoreCollections.posts.rawValue).addDocument(data: fields) { (error) in
+             if let error = error {
+                 completion(.failure(error))
+             } else {
+                 completion(.success(()))
+             }
+         }
+     }
     
 }

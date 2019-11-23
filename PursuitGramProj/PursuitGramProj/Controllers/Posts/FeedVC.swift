@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserPostsVC: UIViewController {
+class FeedVc: UIViewController {
     var user: AppUser?
     override func viewDidLoad() {
         super.viewDidLoad()
