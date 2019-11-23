@@ -12,7 +12,7 @@ class PursuitGramTabBarVC: UITabBarController {
 
     lazy var postsVC = UINavigationController(rootViewController: UserPostsVC())
       lazy var profileVC: UINavigationController = {
-          let userProfileVC = EditUserProfileVC()
+          let userProfileVC = UserProfileVc()
           return UINavigationController(rootViewController: userProfileVC)
       }()
     override func viewDidLoad() {
