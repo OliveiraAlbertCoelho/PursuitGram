@@ -201,6 +201,8 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
                 case .success(let url):
                     //Note - defer UI response, update user image url in auth and in firestore when save is pressed
                     self?.imageURL = url
+                    print("ahhh")
+                    print(self!.imageURL)
                 case .failure(let error):
                     //MARK: TODO - defer image not save alert, try again later. maybe make VC "dirty" to allow user to move on in nav stack
                     print(error)

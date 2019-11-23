@@ -17,20 +17,23 @@ class UserProfileVc: UIViewController {
         postCollectionView.delegate = self
         postCollectionView.dataSource = self
         setUpView()
-
+      
     }
   
     
     lazy var profileImage: UIImageView = {
-        let user = UIImageView()
-        user.backgroundColor = .gray
-        user.image = UIImage(systemName: "person")
-        user.layer.cornerRadius = 15
-        return user
+        let image = UIImageView()
+        image.backgroundColor = .gray
+        image.image = UIImage(contentsOfFile: user!.photoURL!) ?? UIImage(systemName: "person")
+        image.layer.cornerRadius = 15
+        
+        return image
     }()
     lazy var userName: UILabel = {
         let label = UILabel()
-        label.text = "UserName not set"
+        label.text = user.userName ?? "User not found"
+        label.textAlignment = .left
+        label.textColor = .black
         return label
     }()
     lazy var totalPost: UILabel = {
@@ -43,7 +46,9 @@ class UserProfileVc: UIViewController {
     
     lazy var editButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Edit", for: .normal)
+        button.setTitle("Edit profile", for: .normal)
+        button.tintColor = .orange
+        button.backgroundColor = .black
         button.addTarget(self, action: #selector(editAction), for: .touchUpInside)
         return button
     }()
@@ -57,16 +62,18 @@ class UserProfileVc: UIViewController {
           return cv
       }()
     @objc private func editAction(){
+        let editVC = EditUserProfileVC()
+        editVC.modalPresentationStyle = .fullScreen
+        present(editVC, animated: true, completion: nil)
     }
     private func setUpView(){
         constrainProfileImage()
           constrainTotalPost()
         constrainUserName()
-
+        constrainEditButton()
         constrainCollectionView()
-      
     }
-
+ 
     
     private func constrainProfileImage(){
         view.addSubview(profileImage)
@@ -93,19 +100,29 @@ class UserProfileVc: UIViewController {
         view.addSubview(userName)
         userName.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            userName.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 50),
+            userName.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 0),
             userName.heightAnchor.constraint(equalToConstant: 30),
             userName.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 10),
-            userName.widthAnchor.constraint(equalToConstant: 150)
+            userName.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
       ])
     }
+    private func constrainEditButton(){
+             view.addSubview(editButton)
+              editButton.translatesAutoresizingMaskIntoConstraints = false
+              NSLayoutConstraint.activate([
+                  editButton.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor, constant: 0),
+                  editButton.heightAnchor.constraint(equalToConstant: 30),
+                  editButton.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
+                  editButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+            ])
+       }
     private func constrainCollectionView(){
         view.addSubview(postCollectionView)
         postCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             postCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             postCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            postCollectionView.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 0),
+            postCollectionView.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 60),
             postCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
       ])
     }
@@ -124,7 +141,6 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        print(collectionView.contentSize.height)
         return CGSize(width: 137, height: 137)
         
     }
