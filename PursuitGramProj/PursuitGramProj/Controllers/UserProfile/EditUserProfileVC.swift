@@ -117,7 +117,7 @@ class EditUserProfileVC: UIViewController {
             presentPhotoPickerController()
         }
     }
-    private func presentPhotoPickerController() {
+   private  func  presentPhotoPickerController() {
         DispatchQueue.main.async{
             let imagePickerViewController = UIImagePickerController()
             imagePickerViewController.delegate = self
