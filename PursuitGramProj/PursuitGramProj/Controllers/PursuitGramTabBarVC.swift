@@ -31,6 +31,7 @@ class PursuitGramTabBarVC: UITabBarController {
         addPostVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "camera"), tag: 0)
         postsVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "house"), tag: 0)
         profileVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "person"), tag: 2)
+        profileVC.navigationBar.backItem?.hidesBackButton = true
         self.viewControllers = [postsVC,addPostVC,profileVC]
     }
     

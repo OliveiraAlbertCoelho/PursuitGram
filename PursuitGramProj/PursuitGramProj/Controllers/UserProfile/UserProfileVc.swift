@@ -14,12 +14,14 @@ class UserProfileVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+    
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         checkCurrentUser()
         loadProfileImage()
         getPosts()
+            self.navigationItem.hidesBackButton = true
     }
     
     //MARK: - conditional variables
