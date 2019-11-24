@@ -77,7 +77,7 @@ class CreatePostVC: UIViewController {
         FirestoreService.manager.createPost(post: post) { (result) in
             switch result{
             case .success(()):
-            print("yeah")
+                self.navigationController?.pushViewController(FeedVc(), animated: true)
             case .failure(let error):
                 print(error)
                 

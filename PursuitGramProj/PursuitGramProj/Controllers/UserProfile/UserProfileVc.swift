@@ -12,9 +12,10 @@ import FirebaseFirestore
 class UserProfileVc: UIViewController {
     var user: AppUser!
     var isCurrentUser = false
-    var posts: [Post]{
+    var posts = [Post](){
         didSet{
             postCollectionView.reloadData()
+            totalPost.text = "\(self.posts.count) \n Posts"
         }
     }
     override func viewDidLoad() {
@@ -23,7 +24,6 @@ class UserProfileVc: UIViewController {
         postCollectionView.delegate = self
         postCollectionView.dataSource = self
         setUpView()
-        loadProfileImage()
         navigationItem.rightBarButtonItem = logOutButton
     }
     
@@ -50,7 +50,7 @@ class UserProfileVc: UIViewController {
     }()
     lazy var totalPost: UILabel = {
         let label = UILabel()
-        label.text = "0 \n Posts"
+        label.text = "\(self.posts.count) \n Posts"
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -93,6 +93,7 @@ class UserProfileVc: UIViewController {
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
+        cv.isScrollEnabled = true
         cv.backgroundColor = .gray
         return cv
     }()
@@ -101,6 +102,7 @@ class UserProfileVc: UIViewController {
         super.viewWillAppear(true)
         user = AppUser(from: FirebaseAuthService.manager.currentUser!)
         loadProfileImage()
+        getPosts()
     }
     
     
@@ -185,18 +187,41 @@ class UserProfileVc: UIViewController {
             postCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
+    private func getPosts(){
+        DispatchQueue.main.async {
+        
+            FirestoreService.manager.getUserPosts(for: self.user.uid) { (result) in
+            switch result{
+            case .failure(let error):
+                print(error)
+            case .success(let posts):
+                self.posts = posts
+            }
+            }}
+    }
     
     
 }
 extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 40
+        return posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as? PostsCell
-        cell?.postImage.image = UIImage(systemName: "plus")
-        cell?.backgroundColor = .green
+        let data = posts[indexPath.row]
+            DispatchQueue.main.async {
+                FirebaseStorage.postManager.getProfileImage(profileUrl: data.imageUrl!) { (result) in
+            switch result{
+            case .failure(let error):
+                print(error)
+            case .success(let image):
+                cell?.postImage.image = UIImage(data: image, scale: 40)
+             
+            }
+        }
+        }
+        
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

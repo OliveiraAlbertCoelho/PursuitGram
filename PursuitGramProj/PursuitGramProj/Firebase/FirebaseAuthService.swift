@@ -13,7 +13,7 @@ import FirebaseAuth
 class FirebaseAuthService {
     static let manager = FirebaseAuthService()
     private let auth = Auth.auth()
-
+    //returns current user
     var currentUser: User? {
         return auth.currentUser
     }
@@ -54,6 +54,7 @@ class FirebaseAuthService {
             }
         }
     }
+    //logs user out
     func logOut(completion: @escaping (Result<(), Error>) -> ()) {
         do{ try auth.signOut()}
         catch {
