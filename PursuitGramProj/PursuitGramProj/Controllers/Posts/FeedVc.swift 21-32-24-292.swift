@@ -35,15 +35,18 @@ class FeedVc: UIViewController {
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
         cv.isScrollEnabled = true
-        cv.backgroundColor = .gray
+        cv.backgroundColor = .cyan
         cv.delegate = self
         cv.dataSource = self
         return cv
     }()
     lazy var feedLabel: UILabel = {
         let label = UILabel()
-        label.text = "Feed"
-        label.backgroundColor = .gray
+        label.text = "Pursuitsgram"
+        label.textAlignment = .center
+        label.font = UIFont(name: "Verdana-Bold", size: 40)
+        label.textColor = UIColor(red: 100/255, green: 86/255, blue: 145/255, alpha: 1.0)
+        label.backgroundColor = .white
         return label
     }()
     
@@ -130,5 +133,11 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let post = posts[indexPath.row]
+        let detail = PostDetailVC()
+        detail.post = post
+        self.navigationController?.pushViewController(detail, animated: true)
     }
 }

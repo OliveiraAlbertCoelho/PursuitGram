@@ -241,4 +241,11 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+           let post = posts[indexPath.row]
+           let detail = PostDetailVC()
+           detail.post = post
+           self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
 }

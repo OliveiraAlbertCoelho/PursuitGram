@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/albert/Desktop/Unit5/Project/PursuitGram/PursuitGramProj/PursuitGramProj/Controllers/Posts/FeedVC.swift">
-   </FileRef>
-   <FileRef
       location = "group:PursuitGramProj.xcodeproj">
    </FileRef>
    <FileRef
