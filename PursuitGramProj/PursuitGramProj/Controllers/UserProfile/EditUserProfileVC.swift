@@ -10,19 +10,20 @@ import UIKit
 import Photos
 
 class EditUserProfileVC: UIViewController {
+    //MARK: lifecycles
+    override func viewDidLoad() {
+         super.viewDidLoad()
+         view.backgroundColor = .white
+         addViews()
+     }
+    //MARK: Variables
     var imageURL: URL? = nil
     var image = UIImage() {
         didSet {
             self.profileImage.image = image
         }
     }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        addViews()
-    }
+ 
     //MARK: UI Objects
     lazy var profileLabel: UILabel = {
         let label = UILabel()
@@ -116,6 +117,7 @@ class EditUserProfileVC: UIViewController {
             presentPhotoPickerController()
         }
     }
+    //MARK: - Regular funcs
    private  func  presentPhotoPickerController() {
         DispatchQueue.main.async{
             let imagePickerViewController = UIImagePickerController()
@@ -126,15 +128,15 @@ class EditUserProfileVC: UIViewController {
             self.present(imagePickerViewController, animated: true, completion: nil)
         }
     }
-    
-    //MARK: - UI Constraints
     private func addViews(){
-        constrainProfileLabel()
-        constrainImageView()
-        constrainAddImageButton()
-        constrainUserName()
-        constrainSaveButton()
-    }
+           constrainProfileLabel()
+           constrainImageView()
+           constrainAddImageButton()
+           constrainUserName()
+           constrainSaveButton()
+       }
+    //MARK: - UI Constraints
+   
     private func constrainProfileLabel() {
         view.addSubview(profileLabel)
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -187,6 +189,7 @@ class EditUserProfileVC: UIViewController {
     
     
 }
+//MARK: - UiImagePicker
 extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let image = info[.editedImage] as? UIImage else {
@@ -200,11 +203,10 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
         FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
             switch result{
             case .success(let url):
-                //Note - defer UI response, update user image url in auth and in firestore when save is pressed
                 self?.imageURL = url
                 print("ahhh")
             case .failure(let error):
-                //MARK: TODO - defer image not save alert, try again later. maybe make VC "dirty" to allow user to move on in nav stack
+          
                 print(error)
             }
         })
