@@ -17,6 +17,7 @@ class UserLoginVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     // MARK: - UI objects
+
     lazy var pursuitGramLogo: UILabel = {
         let label = UILabel()
         label.text = "Pursuitsgram"
@@ -68,6 +69,7 @@ class UserLoginVC: UIViewController {
     
 
  //MARK: - Objc functions
+
     @objc func loginAction(){
         guard let email = emailTextField.text, let password = passwordTextField.text else {
                 showAlert(title: "Error", message: "Please fill out all fields.")
@@ -96,10 +98,14 @@ class UserLoginVC: UIViewController {
     
     //MARK: Regular VC functions
     private func setupSubViews() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
           setupPursuitGramLogo()
           setupCreateAccountButton()
           setupLoginStack()
       }
+ 
+ 
      
     private func handleLoginResponse(with result: Result<(), Error>) {
         switch result {
@@ -140,7 +146,8 @@ private func showAlert(title: String, message: String) {
          stackView.axis = .vertical
          stackView.spacing = 15
          stackView.distribution = .fillEqually
-         self.view.addSubview(stackView)
+        
+        view.addSubview(stackView)
          stackView.translatesAutoresizingMaskIntoConstraints = false
          NSLayoutConstraint.activate([
              stackView.bottomAnchor.constraint(equalTo: createAccount.topAnchor, constant: -50),
@@ -158,3 +165,13 @@ private func showAlert(title: String, message: String) {
             createAccount.heightAnchor.constraint(equalToConstant: 50)])
     }
 }
+extension UserLoginVC: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
+}
+
+   
+   
+   
+  

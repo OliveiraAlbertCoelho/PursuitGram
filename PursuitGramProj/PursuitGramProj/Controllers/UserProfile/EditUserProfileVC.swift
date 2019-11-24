@@ -38,6 +38,7 @@ class EditUserProfileVC: UIViewController {
         image.backgroundColor = .gray
         image.image = UIImage(systemName: "person")
         image.layer.cornerRadius = 15
+        
         return image
     }()
     lazy var userName: UITextField = {

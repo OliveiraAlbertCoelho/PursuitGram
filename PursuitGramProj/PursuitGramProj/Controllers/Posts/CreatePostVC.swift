@@ -15,6 +15,7 @@ class CreatePostVC: UIViewController {
            setupViews()
        }
     //MARK: - Regular variables
+    let imagePickerViewController = UIImagePickerController()
     var imageURL: URL? = nil
     var user: AppUser!
     var image = UIImage() {
@@ -68,10 +69,10 @@ class CreatePostVC: UIViewController {
     }
     
     @objc private func shareAction(){
-        guard let image = imageURL?.absoluteString, let currentUser = user?.uid else{
-            return
-        }
         
+        guard let image = imageURL?.absoluteString, let currentUser = user?.uid else{
+            return showAlert(title: "", message: "Please pick a image")
+        }
         let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: image )
         FirestoreService.manager.createPost(post: post) { (result) in
             switch result{
@@ -82,8 +83,8 @@ class CreatePostVC: UIViewController {
             case .failure(let error):
                 print(error)
             }
-        }
-    }
+            }}
+    
     //MARK: - Regular functions
     private func setupViews(){
         view.backgroundColor = .black
@@ -97,14 +98,11 @@ class CreatePostVC: UIViewController {
         present(alertVC, animated: true)
     }
     private func presentPhotoPickerController() {
-        DispatchQueue.main.async{
-            let imagePickerViewController = UIImagePickerController()
-            imagePickerViewController.delegate = self
-            imagePickerViewController.sourceType = .photoLibrary
-            imagePickerViewController.allowsEditing = true
-            imagePickerViewController.mediaTypes = ["public.image"]
-            self.present(imagePickerViewController, animated: true, completion: nil)
-        }
+            self.imagePickerViewController.delegate = self
+            self.imagePickerViewController.sourceType = .photoLibrary
+            self.imagePickerViewController.allowsEditing = true
+            self.imagePickerViewController.mediaTypes = ["public.image"]
+            self.present(self.imagePickerViewController, animated: true, completion: nil)
     }
     //MARK: - Constraints
     private func setupImageView() {

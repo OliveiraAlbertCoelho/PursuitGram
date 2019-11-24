@@ -35,14 +35,18 @@ class UserProfileVc: UIViewController {
     //MARK: - UI Objects
     lazy var profileImage: UIImageView = {
         let image = UIImageView()
-        image.backgroundColor = .gray
+        image.backgroundColor = .black
+        image.tintColor = .blue
         if let photo = user.photoURL{
             image.image = UIImage(contentsOfFile: (photo))
         }else {
             image.image = UIImage(systemName: "person")
         }
-        
-        image.layer.cornerRadius = 15
+        image.layer.cornerRadius = 120/2
+       image.layer.shadowOpacity = 0.3
+       image.layer.shadowRadius = 2.0
+       image.layer.shadowColor = UIColor.yellow.cgColor
+       image.clipsToBounds = true
         return image
     }()
     lazy var userName: UILabel = {
@@ -61,7 +65,7 @@ class UserProfileVc: UIViewController {
         return label
     }()
     lazy var logOutButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: self, action: #selector(logOut))
+        let button = UIBarButtonItem(title: "Sign Out", style: UIBarButtonItem.Style.plain, target: self, action: #selector(logOut))
         return button
     }()
     lazy var editButton: UIButton = {
@@ -83,7 +87,7 @@ class UserProfileVc: UIViewController {
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
         cv.isScrollEnabled = true
-        cv.backgroundColor = .gray
+        cv.backgroundColor = .white
         cv.delegate = self
         cv.dataSource = self
         return cv
@@ -94,7 +98,6 @@ class UserProfileVc: UIViewController {
     @objc func logOut (){
         DispatchQueue.main.async {
             FirebaseAuthService.manager.logOut { (result) in
-                
             }
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                 let sceneDelegate = windowScene.delegate as? SceneDelegate, let window = sceneDelegate.window
@@ -161,9 +164,9 @@ class UserProfileVc: UIViewController {
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             profileImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            profileImage.heightAnchor.constraint(equalToConstant: 150),
+            profileImage.heightAnchor.constraint(equalToConstant: 120),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            profileImage.widthAnchor.constraint(equalToConstant: 150)
+            profileImage.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
     private func constrainTotalPost(){
@@ -229,7 +232,6 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
                 }
             }
         }
-        
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
