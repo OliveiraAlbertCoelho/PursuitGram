@@ -29,8 +29,8 @@ class PursuitGramTabBarVC: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addPostVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "camera"), tag: 0)
-        postsVC.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "list.dash"), tag: 0)
-        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.crop.square"), tag: 2)
+        postsVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "house"), tag: 0)
+        profileVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "person"), tag: 2)
         self.viewControllers = [postsVC,addPostVC,profileVC]
     }
     
