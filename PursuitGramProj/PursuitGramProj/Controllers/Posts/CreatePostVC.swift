@@ -29,6 +29,7 @@ class CreatePostVC: UIViewController {
         let image = UIImageView()
         image.image = UIImage(systemName: "camera")
         image.sizeToFit()
+        image.backgroundColor = .black
         return image
     }()
     lazy var imageLibrary: UIButton = {
@@ -85,10 +86,15 @@ class CreatePostVC: UIViewController {
     }
     //MARK: - Regular functions
     private func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         setupImageView()
         setupLibraryButton()
         self.navigationItem.rightBarButtonItem = shareButton
+    }
+     private func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertVC, animated: true)
     }
     private func presentPhotoPickerController() {
         DispatchQueue.main.async{
@@ -115,7 +121,7 @@ class CreatePostVC: UIViewController {
         view.addSubview(imageLibrary)
         imageLibrary.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageLibrary.topAnchor.constraint(equalTo: self.postImage.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            imageLibrary.topAnchor.constraint(equalTo: self.postImage.safeAreaLayoutGuide.bottomAnchor, constant: 120),
             imageLibrary.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             imageLibrary.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             imageLibrary.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
@@ -139,10 +145,10 @@ extension CreatePostVC: UIImagePickerControllerDelegate, UINavigationControllerD
         FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
             switch result{
             case .success(let url):
-                //Note - defer UI response, update user image url in auth and in firestore when save is pressed
+                self?.showAlert(title: "", message: "Saved")
                 self?.imageURL = url
             case .failure(let error):
-                //MARK: TODO - defer image not save alert, try again later. maybe make VC "dirty" to allow user to move on in nav stack
+                self?.showAlert(title: "", message: "Please retry to save Image")
                 print(error)
             }
         })
