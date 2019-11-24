@@ -10,8 +10,16 @@ import UIKit
 
 class PursuitGramTabBarVC: UITabBarController {
 
-    lazy var postsVC = UINavigationController(rootViewController: FeedVc())
-    lazy var addPostVC = UINavigationController(rootViewController: CreatePostVC())
+    lazy var postsVC: UINavigationController = {
+        let postVC = FeedVc()
+        postVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
+        return UINavigationController(rootViewController: postVC)
+    }()
+    lazy var addPostVC: UINavigationController = {
+        let add = CreatePostVC()
+        add.user = AppUser(from: FirebaseAuthService.manager.currentUser!)
+        return UINavigationController(rootViewController: add)
+    }()
       lazy var profileVC: UINavigationController = {
           let userProfileVC = UserProfileVc()
            userProfileVC.user = AppUser(from: FirebaseAuthService.manager.currentUser!)

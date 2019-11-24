@@ -219,7 +219,7 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
         let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as? PostsCell
         let data = posts[indexPath.row]
         DispatchQueue.main.async {
-            FirebaseStorage.postManager.getProfileImage(profileUrl: data.imageUrl!) { (result) in
+            FirebaseStorage.postManager.getImages(profileUrl: data.imageUrl!) { (result) in
                 switch result{
                 case .failure(let error):
                     print(error)

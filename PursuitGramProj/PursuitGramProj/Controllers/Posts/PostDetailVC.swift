@@ -10,21 +10,36 @@ import UIKit
 
 class PostDetailVC: UIViewController {
 
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
+    //MARK: - Variables
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
+    
+    //MARK: - UI Objects
+    lazy var postImage: UIImageView = {
+       let view = UIImageView()
+        
+    return view
+    }()
+    
+    //MARK: - Constraints
+    private func setUpPostImage() {
+           view.addSubview(postImage)
+           postImage.translatesAutoresizingMaskIntoConstraints = false
+           NSLayoutConstraint.activate([
+               postImage.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+               postImage.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+               postImage.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+               postImage.heightAnchor.constraint(equalTo: self.view., multiplier: <#T##CGFloat#>)
+               
+           ])
+           
+       }
+   
 
 }

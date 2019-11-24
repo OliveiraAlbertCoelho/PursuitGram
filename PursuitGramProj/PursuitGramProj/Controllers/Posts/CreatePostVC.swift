@@ -9,18 +9,21 @@
 import UIKit
 import Photos
 class CreatePostVC: UIViewController {
+    //MARK: - lifecycle
+       override func viewDidLoad() {
+           super.viewDidLoad()
+           setupViews()
+       }
+    //MARK: - Regular variables
     var imageURL: URL? = nil
-    var currentUser = FirebaseAuthService.manager.currentUser
+    var user: AppUser!
     var image = UIImage() {
         didSet {
             self.postImage.image = image
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupViews()
-    }
+   
     //MARK: - Ui Objects
     lazy var postImage: UIImageView = {
         let image = UIImageView()
@@ -63,21 +66,21 @@ class CreatePostVC: UIViewController {
     }
     
     @objc private func shareAction(){
-        guard let image = imageURL?.absoluteString, let user = currentUser?.uid else{
+        guard let image = imageURL?.absoluteString, let currentUser = user?.uid else{
             return
         }
         
-        let post = Post(creatorID: user , dateCreated: nil, imageUrl: image )
+        let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: image )
         FirestoreService.manager.createPost(post: post) { (result) in
             switch result{
             case .success(()):
-                self.navigationController?.pushViewController(FeedVc(), animated: true)
+                let userProfile = UserProfileVc()
+                userProfile.user = self.user
+                self.navigationController?.pushViewController(userProfile, animated: true)
             case .failure(let error):
                 print(error)
-                
             }
         }
-        
     }
     //MARK: - Regular functions
     private func setupViews(){
