@@ -10,7 +10,6 @@ import UIKit
 import Photos
 class CreatePostVC: UIViewController {
     //MARK: - lifecycle
-    
     var images = [PHAsset]()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,15 +40,15 @@ class CreatePostVC: UIViewController {
     lazy var postImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "camera")
-    
-        image.backgroundColor = .black
+        image.backgroundColor = #colorLiteral(red: 0.2481059134, green: 0.430631876, blue: 0.7893758416, alpha: 1)
+        image.tintColor = .black
         image.contentMode = .scaleToFill
         return image
     }()
     lazy var imageLibrary: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .blue
-        button.setTitle("pick", for: .normal)
+        button.backgroundColor =  #colorLiteral(red: 0.2481059134, green: 0.430631876, blue: 0.7893758416, alpha: 1)
+        button.setTitle("Library", for: .normal)
         button.addTarget(self, action: #selector(addImagePressed), for: .touchUpInside)
         return button
         
@@ -92,11 +91,12 @@ class CreatePostVC: UIViewController {
               guard let currentUser = self!.user?.uid else{
                     return self!.showAlert(title: "", message: "Please pick a image")
                        }
+              self?.tabBarController?.selectedIndex = 2
               let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: url.absoluteString )
                        FirestoreService.manager.createPost(post: post) { (result) in
                            switch result{
                            case .success(()):
-                            self!.showAlert(title: "", message: "Saved")
+                            self!.postImage.image = UIImage(systemName: "camera")
                            case .failure(let error):
                                print(error)
                            }
@@ -135,20 +135,20 @@ class CreatePostVC: UIViewController {
         view.addSubview(postImage)
         postImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            postImage.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            postImage.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             postImage.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             postImage.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            postImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.60)])
+            postImage.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.40)])
         
     }
     private func setupLibraryButton() {
         view.addSubview(imageLibrary)
         imageLibrary.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageLibrary.topAnchor.constraint(equalTo: self.postImage.safeAreaLayoutGuide.bottomAnchor, constant: 120),
+            imageLibrary.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             imageLibrary.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             imageLibrary.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            imageLibrary.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            imageLibrary.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.10)
             
         ])
         

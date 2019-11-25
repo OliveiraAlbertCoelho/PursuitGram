@@ -34,7 +34,7 @@ class FeedVc: UIViewController {
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
         cv.isScrollEnabled = true
-        cv.backgroundColor = .black
+        cv.backgroundColor =  #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
         cv.delegate = self
         cv.dataSource = self
         return cv
@@ -44,8 +44,8 @@ class FeedVc: UIViewController {
         label.text = "Pursuitsgram"
         label.textAlignment = .center
         label.font = UIFont(name: "Verdana-Bold", size: 40)
-        label.textColor = UIColor(red: 100/255, green: 86/255, blue: 145/255, alpha: 1.0)
-        label.backgroundColor = .white
+        label.textColor = #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
+        label.backgroundColor = .black
         return label
     }()
     

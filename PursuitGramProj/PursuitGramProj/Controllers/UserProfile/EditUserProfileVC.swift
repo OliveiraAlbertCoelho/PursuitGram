@@ -27,7 +27,7 @@ class EditUserProfileVC: UIViewController {
         let label = UILabel()
         label.text = "Profile"
         label.font = UIFont(name: "Verdana-Bold", size: 40)
-        label.textColor = UIColor(red: 255/255, green: 86/255, blue: 0/255, alpha: 1.0)
+        label.textColor = #colorLiteral(red: 0.2481059134, green: 0.430631876, blue: 0.7893758416, alpha: 1)
         label.textAlignment = .center
         return label
     }()
@@ -45,8 +45,9 @@ class EditUserProfileVC: UIViewController {
         textField.font = UIFont(name: "Verdana", size: 14)
         textField.backgroundColor = .white
         textField.borderStyle = .bezel
-        textField.layer.cornerRadius = 15
+        textField.layer.cornerRadius = 30
         textField.autocorrectionType = .no
+        
         return textField
     }()
     lazy var addImage: UIButton = {
@@ -54,7 +55,7 @@ class EditUserProfileVC: UIViewController {
         button.setBackgroundImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .white
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
-        button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0.2512508333, green: 0.4225369692, blue: 0.7813953161, alpha: 1)
         button.layer.cornerRadius = 30
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 2.0
@@ -68,7 +69,7 @@ class EditUserProfileVC: UIViewController {
         button.setTitle("Save Profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
-        button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0.2563059926, green: 0.4384370148, blue: 0.8014467359, alpha: 1)
         button.layer.cornerRadius = 5
         
         button.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
@@ -93,6 +94,7 @@ class EditUserProfileVC: UIViewController {
                             switch newResult {
                             case .success():
                                 self?.navigationController?.popViewController(animated: true)
+    
                             case .failure(let error):
                                 print(error)
                             }
@@ -137,7 +139,7 @@ class EditUserProfileVC: UIViewController {
         }
     }
     private func addViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = #colorLiteral(red: 0.4043477178, green: 0.7694571614, blue: 0.7561989427, alpha: 1)
         constrainProfileLabel()
         constrainImageView()
         constrainAddImageButton()
@@ -150,8 +152,8 @@ class EditUserProfileVC: UIViewController {
         view.addSubview(profileLabel)
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            profileLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            profileLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            profileLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            profileLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             profileLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             profileLabel.heightAnchor.constraint(equalToConstant: 50)])
     }
@@ -160,7 +162,6 @@ class EditUserProfileVC: UIViewController {
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100),
-            profileImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100),
             profileImage.topAnchor.constraint(equalTo: profileLabel.bottomAnchor, constant: 100),
             profileImage.heightAnchor.constraint(equalToConstant: 200),
             profileImage.widthAnchor.constraint(equalToConstant: 200)])

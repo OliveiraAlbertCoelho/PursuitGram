@@ -13,16 +13,16 @@ class UserProfileVc: UIViewController {
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+         user = AppUser(from: FirebaseAuthService.manager.currentUser!)
         loadProfileImage()
         setUpView()
-        getPosts()
      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         user = AppUser(from: FirebaseAuthService.manager.currentUser!)
         loadProfileImage()
-       
+         getPosts()
         self.navigationItem.hidesBackButton = true
     }
     
@@ -72,7 +72,7 @@ class UserProfileVc: UIViewController {
         button.tintColor = .orange
         button.backgroundColor = .black
         button.addTarget(self, action: #selector(editAction), for: .touchUpInside)
-   
+        button.layer.cornerRadius = 5
         return button
     }()
     
@@ -107,7 +107,6 @@ class UserProfileVc: UIViewController {
     
     @objc private func editAction(){
         let editVC = EditUserProfileVC()
-
         editVC.image = profileImage.image
         self.navigationController?.pushViewController(editVC, animated: true)
     }
@@ -128,7 +127,6 @@ class UserProfileVc: UIViewController {
         guard let photo = self.user.photoURL else {
             return
         }
-        DispatchQueue.main.async {
             FirebaseStorage.profilemanager.getImages(profileUrl: photo) { (result) in
                 switch result{
                 case .failure(let error):
@@ -137,7 +135,6 @@ class UserProfileVc: UIViewController {
                 self.profileImage.image = UIImage(data: data)
                 }
             }
-        }
     }
     
     private func getPosts(){
