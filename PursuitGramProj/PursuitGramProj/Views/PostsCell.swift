@@ -29,7 +29,7 @@ class PostsCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .black
         label.textAlignment = .left
-        label.backgroundColor = .white
+        label.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
         label.text = "me"
         return label
     }()
@@ -50,7 +50,7 @@ class PostsCell: UICollectionViewCell {
           NSLayoutConstraint.activate([
               userNameLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 0),
               userNameLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-              userNameLabel.heightAnchor.constraint(equalToConstant: 50),
+              userNameLabel.heightAnchor.constraint(equalToConstant: 30),
               userNameLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: 0)
           ])
       }

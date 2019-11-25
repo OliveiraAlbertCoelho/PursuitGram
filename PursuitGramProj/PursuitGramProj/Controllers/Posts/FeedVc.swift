@@ -14,6 +14,7 @@ class FeedVc: UIViewController {
             postCollectionView.reloadData()
         }
     }
+    var users = [AppUser]()
     
     //MARK: - lifecycle
     override func viewDidLoad() {
@@ -44,14 +45,14 @@ class FeedVc: UIViewController {
         label.text = "Pursuitsgram"
         label.textAlignment = .center
         label.font = UIFont(name: "Verdana-Bold", size: 40)
-        label.textColor = #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
-        label.backgroundColor = .black
+        label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        label.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
         return label
     }()
     
     //MARK: Regular functions
     private func setUpView(){
-        view.backgroundColor = .black
+        view.backgroundColor = #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
         constrainFeedLabel()
         constrainCollectionView()
     }
@@ -95,7 +96,7 @@ class FeedVc: UIViewController {
         NSLayoutConstraint.activate([
             postCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             postCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            postCollectionView.topAnchor.constraint(equalTo: feedLabel.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            postCollectionView.topAnchor.constraint(equalTo: feedLabel.safeAreaLayoutGuide.bottomAnchor, constant: 15),
             postCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
@@ -110,28 +111,25 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as? PostsCell
         let data = posts[indexPath.row]
-     
-//            FirebaseStorage.postManager.getImages(profileUrl: data.imageUrl!) { (result) in
-//                switch result{
-//                case .failure(let error):
-//                    print(error)
-//                case .success(let image):
-//                    cell?.postImage.image = UIImage(data: image, scale: 40)
-//                }}}
-        
-        
+        if let userUrl = data.imageUrl{
+            FirebaseStorage.postManager.getImages(profileUrl: userUrl) { (result) in
+                switch result{
+                case .failure(let error):
+                    print(error)
+                case .success(let image):
+                    cell?.postImage.image = UIImage(data: image, scale: 40)
+                }}
                     FirestoreService.manager.getUserFromPost(creatorID: data.creatorID) { (result) in
                         DispatchQueue.main.async {
-                            
-                        
                         switch result{
                         case .failure(let error):
                             print(error)
                         case .success(let user):
-                            cell?.userNameLabel.text = user.userName
+                            cell?.userNameLabel.text = user.userName ?? " "
+                            self.users.append(user)
                             }
                         }
-        }
+            }}
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -145,8 +143,10 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let post = posts[indexPath.row]
+        let user = users[indexPath.row]
         let detail = PostDetailVC()
         detail.post = post
+        detail.user = user
         self.navigationController?.pushViewController(detail, animated: true)
     }
 }

@@ -11,6 +11,7 @@ import UIKit
 class PostDetailVC: UIViewController {
 
     var post: Post?
+    var user: AppUser?
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,16 +30,23 @@ class PostDetailVC: UIViewController {
         view.contentMode = .scaleToFill
     return view
     }()
+    lazy var userLabel: UILabel = {
+        let label = UILabel()
+        label.text = user?.userName
+        return label
+    }()
     
     //MARK: - Regular functions
     private func setUpView(){
-        view.backgroundColor = .white
+        view.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
         setUpPostImage()
+        setUpUserLabel()
     }
+    
     private func loadPost(){
         guard let postData = post?.imageUrl else{
             return print("error")
-        }
+    }
         FirebaseStorage.postManager.getImages(profileUrl: postData) { (result) in
             DispatchQueue.main.async {
             switch result{
@@ -46,11 +54,11 @@ class PostDetailVC: UIViewController {
                 self.postImage.image = UIImage(data: data)
             case .failure(let error):
                 print(error)
-                }}
+                }
+            }
         }
-        
     }
-    
+        
     //MARK: - Constraints
     private func setUpPostImage() {
            view.addSubview(postImage)
@@ -63,6 +71,17 @@ class PostDetailVC: UIViewController {
            ])
            
        }
+    private func setUpUserLabel() {
+            view.addSubview(userLabel)
+            userLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                userLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                userLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+                userLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+                userLabel.topAnchor.constraint(equalTo: self.postImage.bottomAnchor, constant: 10)
+            ])
+            
+        }
    
     
 }
