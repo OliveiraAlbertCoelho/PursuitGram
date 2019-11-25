@@ -19,6 +19,8 @@ class PostsCell: UICollectionViewCell {
     }
     lazy var postImage: UIImageView = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFit
+        image.backgroundColor = .black
         return image
     }()
     

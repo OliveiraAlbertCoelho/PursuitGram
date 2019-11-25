@@ -26,6 +26,7 @@ class PostDetailVC: UIViewController {
     lazy var postImage: UIImageView = {
     let view = UIImageView()
     view.backgroundColor = .blue
+        view.contentMode = .scaleToFill
     return view
     }()
     

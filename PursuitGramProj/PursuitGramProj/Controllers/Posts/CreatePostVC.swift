@@ -41,8 +41,9 @@ class CreatePostVC: UIViewController {
     lazy var postImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "camera")
-        image.sizeToFit()
+    
         image.backgroundColor = .black
+        image.contentMode = .scaleToFill
         return image
     }()
     lazy var imageLibrary: UIButton = {
@@ -88,30 +89,27 @@ class CreatePostVC: UIViewController {
         FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
             switch result{
             case .success(let url):
-                self?.showAlert(title: "", message: "Saved")
-                self?.imageURL = url
+              guard let currentUser = self!.user?.uid else{
+                    return self!.showAlert(title: "", message: "Please pick a image")
+                       }
+              let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: url.absoluteString )
+                       FirestoreService.manager.createPost(post: post) { (result) in
+                           switch result{
+                           case .success(()):
+                            self!.showAlert(title: "", message: "Saved")
+                           case .failure(let error):
+                               print(error)
+                           }
+                       }
             case .failure(let error):
                 self?.showAlert(title: "", message: "Please retry to save Image")
                 print(error)
             }
         })
+       
         
-        
-        
-        guard let image = imageURL?.absoluteString, let currentUser = user?.uid else{
-            return showAlert(title: "", message: "Please pick a image")
-        }
-        let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: image )
-        FirestoreService.manager.createPost(post: post) { (result) in
-            switch result{
-            case .success(()):
-                let userProfile = UserProfileVc()
-                userProfile.user = self.user
-                self.navigationController?.pushViewController(userProfile, animated: true)
-            case .failure(let error):
-                print(error)
-            }
-        }}
+       
+    }
     
     //MARK: - Regular functions
     private func setupViews(){

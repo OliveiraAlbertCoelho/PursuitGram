@@ -19,11 +19,10 @@ class FeedVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        
+        getPosts()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        getPosts()
     }
     //MARK: Variables
     var user: AppUser?
@@ -35,7 +34,7 @@ class FeedVc: UIViewController {
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
         cv.isScrollEnabled = true
-        cv.backgroundColor = .cyan
+        cv.backgroundColor = .black
         cv.delegate = self
         cv.dataSource = self
         return cv
@@ -52,7 +51,7 @@ class FeedVc: UIViewController {
     
     //MARK: Regular functions
     private func setUpView(){
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         constrainFeedLabel()
         constrainCollectionView()
     }
@@ -126,7 +125,7 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 137, height: 137)
+        return CGSize(width: 400, height: 300)
         
     }
     

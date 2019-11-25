@@ -12,18 +12,16 @@ import Photos
 class EditUserProfileVC: UIViewController {
     //MARK: lifecycles
     override func viewDidLoad() {
-         super.viewDidLoad()
-         view.backgroundColor = .white
-         addViews()
-     }
+        super.viewDidLoad()
+        addViews()
+    }
     //MARK: Variables
-    var imageURL: URL? = nil
-    var image = UIImage() {
+    var image: UIImage! {
         didSet {
             self.profileImage.image = image
         }
     }
- 
+    
     //MARK: UI Objects
     lazy var profileLabel: UILabel = {
         let label = UILabel()
@@ -72,34 +70,43 @@ class EditUserProfileVC: UIViewController {
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
         button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
         button.layer.cornerRadius = 5
+        
         button.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
         return button
     }()
     //MARK: - Objc funcs
     @objc private func savePressed(){
-        guard let userText = userName.text, let imageURL = imageURL else {
-            print("error")
-            return
-        }
-    
-            FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: imageURL) { (result) in
-                switch result{
-                case .success():
-                    FirestoreService.manager.updateCurrentUser(userName: userText, photoURL: imageURL) { [weak self] (newResult) in
-                        switch newResult {
-                        case .success():
-                            print(imageURL)
-                            self?.navigationController?.popViewController(animated: true)
-                        case .failure(let error):
-                            print(error)
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
+        guard let imageData = image.jpegData(compressionQuality: 1) else {
+                  return
+              }
+        FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
+            switch result{
+            case .success(let url):
+                guard let userText = self!.userName.text else {
+                    print("error")
+                    return
                 }
+                FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: url) { (result) in
+                    switch result{
+                    case .success():
+                        FirestoreService.manager.updateCurrentUser(userName: userText, photoURL: url) { [weak self] (newResult) in
+                            switch newResult {
+                            case .success():
+                                self?.navigationController?.popViewController(animated: true)
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            case .failure(let error):
+                print(error)
             }
-        
+        })
     }
+    
     
     @objc private func addImagePressed(){
         switch PHPhotoLibrary.authorizationStatus(){
@@ -119,7 +126,7 @@ class EditUserProfileVC: UIViewController {
         }
     }
     //MARK: - Regular funcs
-   private  func  presentPhotoPickerController() {
+    private  func  presentPhotoPickerController() {
         DispatchQueue.main.async{
             let imagePickerViewController = UIImagePickerController()
             imagePickerViewController.delegate = self
@@ -130,14 +137,15 @@ class EditUserProfileVC: UIViewController {
         }
     }
     private func addViews(){
-           constrainProfileLabel()
-           constrainImageView()
-           constrainAddImageButton()
-           constrainUserName()
-           constrainSaveButton()
-       }
+        view.backgroundColor = .white
+        constrainProfileLabel()
+        constrainImageView()
+        constrainAddImageButton()
+        constrainUserName()
+        constrainSaveButton()
+    }
     //MARK: - UI Constraints
-   
+    
     private func constrainProfileLabel() {
         view.addSubview(profileLabel)
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -197,20 +205,6 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
             return
         }
         self.image = image
-        guard let imageData = image.jpegData(compressionQuality: 1) else {
-            return
-        }
-        
-        FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
-            switch result{
-            case .success(let url):
-                self?.imageURL = url
-                print("ahhh")
-            case .failure(let error):
-          
-                print(error)
-            }
-        })
         dismiss(animated: true, completion: nil)
     }
 }

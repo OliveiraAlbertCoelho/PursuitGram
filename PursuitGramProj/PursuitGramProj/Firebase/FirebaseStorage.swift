@@ -10,13 +10,13 @@ import Foundation
 import FirebaseStorage
 
 //switch on type of reference
-enum typeOfReference{
-    case post
-    case profile
+enum typeOfReference: String{
+    case post = "postImage"
+    case profile = "profileImage"
 }
 class FirebaseStorage {
 
-    // 2 managers for separate tasks: one for posts and another for profile image
+    // 2 managers for separate tasks:  one for posts and another for profile image
     static var profilemanager = FirebaseStorage(type: .profile)
     static var postManager = FirebaseStorage(type: .post)
         private let storage: Storage!
@@ -26,13 +26,7 @@ class FirebaseStorage {
     init(type: typeOfReference) {
             storage = Storage.storage()
             storageReference = storage.reference()
-        switch type {
-            //this is the referece to the folder in firebase image folders
-        case .post:
-             imagesFolderReference = storageReference.child("postImage")
-        case .profile:
-              imagesFolderReference = storageReference.child("profileImage")
-        }
+            imagesFolderReference = storageReference.child(type.rawValue)
         }
         
     //save images

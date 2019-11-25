@@ -13,13 +13,16 @@ class UserProfileVc: UIViewController {
     //MARK: - lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadProfileImage()
         setUpView()
         getPosts()
+     
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-    
+        user = AppUser(from: FirebaseAuthService.manager.currentUser!)
         loadProfileImage()
+       
         self.navigationItem.hidesBackButton = true
     }
     
@@ -31,17 +34,13 @@ class UserProfileVc: UIViewController {
             totalPost.text = "\(self.posts.count) \n Posts"
         }
     }
-    
     //MARK: - UI Objects
     lazy var profileImage: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .black
         image.tintColor = .blue
-        if let photo = user.photoURL{
-            image.image = UIImage(contentsOfFile: (photo))
-        }else {
-            image.image = UIImage(systemName: "person")
-        }
+        image.backgroundColor = .black
+        image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 120/2
        image.layer.shadowOpacity = 0.3
        image.layer.shadowRadius = 2.0
@@ -51,7 +50,6 @@ class UserProfileVc: UIViewController {
     }()
     lazy var userName: UILabel = {
         let label = UILabel()
-        
         label.text = user.userName ?? "User not found"
         label.textAlignment = .left
         label.textColor = .black
@@ -73,7 +71,6 @@ class UserProfileVc: UIViewController {
         button.setTitle("Edit profile", for: .normal)
         button.tintColor = .orange
         button.backgroundColor = .black
-        button.isHidden = true
         button.addTarget(self, action: #selector(editAction), for: .touchUpInside)
    
         return button
@@ -110,7 +107,8 @@ class UserProfileVc: UIViewController {
     
     @objc private func editAction(){
         let editVC = EditUserProfileVC()
-        editVC.profileImage.image = profileImage.image
+
+        editVC.image = profileImage.image
         self.navigationController?.pushViewController(editVC, animated: true)
     }
     //MARK: - VC regular Functions
@@ -136,10 +134,11 @@ class UserProfileVc: UIViewController {
                 case .failure(let error):
                     print(error)
                 case .success(let data):
-                    self.profileImage.image = UIImage(data: data)
+                self.profileImage.image = UIImage(data: data)
                 }
             }
-        }}
+        }
+    }
     
     private func getPosts(){
         DispatchQueue.main.async { 

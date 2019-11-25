@@ -21,7 +21,7 @@ class SignUpVc: UIViewController {
         let label = UILabel()
         label.text = "Sign Up"
         label.font = UIFont(name: "Verdana-Bold", size: 28)
-        label.textColor = UIColor(red: 255/255, green: 86/255, blue: 0/255, alpha: 1.0)
+        label.textColor = #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
         label.backgroundColor = .clear
         label.textAlignment = .center
         return label
@@ -54,7 +54,7 @@ class SignUpVc: UIViewController {
         button.setTitle("Create", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: "Verdana-Bold", size: 14)
-        button.backgroundColor = UIColor(red: 255/255, green: 67/255, blue: 0/255, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
         button.layer.cornerRadius = 5
         button.isEnabled = false
         button.addTarget(self, action: #selector(trySignUp), for: .touchUpInside)
