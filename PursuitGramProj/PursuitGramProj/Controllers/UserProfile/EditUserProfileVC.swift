@@ -47,7 +47,7 @@ class EditUserProfileVC: UIViewController {
         textField.borderStyle = .bezel
         textField.layer.cornerRadius = 30
         textField.autocorrectionType = .no
-        
+        textField.delegate = self
         return textField
     }()
     lazy var addImage: UIButton = {
@@ -60,6 +60,7 @@ class EditUserProfileVC: UIViewController {
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 2.0
         button.layer.shadowColor = UIColor.yellow.cgColor
+        
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(addImagePressed), for: .touchUpInside)
         return button
@@ -77,37 +78,40 @@ class EditUserProfileVC: UIViewController {
     }()
     //MARK: - Objc funcs
     @objc private func savePressed(){
-        guard let imageData = image.jpegData(compressionQuality: 1) else {
-                  return
-              }
-        FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
-            switch result{
-            case .success(let url):
-                guard let userText = self!.userName.text else {
-                    print("error")
-                    return
-                }
-                FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: url) { (result) in
-                    switch result{
-                    case .success():
-                        FirestoreService.manager.updateCurrentUser(userName: userText, photoURL: url) { [weak self] (newResult) in
-                            switch newResult {
-                            case .success():
-                                self?.navigationController?.popViewController(animated: true)
-    
-                            case .failure(let error):
-                                print(error)
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-            case .failure(let error):
-                print(error)
+        guard let userInfo = userName.text else {
+            return showAlert(title: "", message: "Please type a username")
+        }
+        if userInfo.isEmpty{
+            showAlert(title: "", message: "Please type a username")
+        }else {
+            guard let imageData = image.jpegData(compressionQuality: 1) else {
+                return
             }
-        })
-    }
+            FirebaseStorage.profilemanager.storeImage(image: imageData, completion: { [weak self] (result) in
+                switch result{
+                case .success(let url):
+                    
+                    FirebaseAuthService.manager.updateUserFields(userName: userInfo, photoURL: url) { (result) in
+                        switch result{
+                        case .success():
+                            FirestoreService.manager.updateCurrentUser(userName: userInfo, photoURL: url) { [weak self] (newResult) in
+                                switch newResult {
+                                case .success():
+                                    self?.navigationController?.popViewController(animated: true)
+                                    
+                                case .failure(let error):
+                                    print(error)
+                                }
+                            }
+                        case .failure(let error):
+                            print(error)
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            })
+        }}
     
     
     @objc private func addImagePressed(){
@@ -128,6 +132,11 @@ class EditUserProfileVC: UIViewController {
         }
     }
     //MARK: - Regular funcs
+    private func showAlert(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertVC, animated: true)
+    }
     private  func  presentPhotoPickerController() {
         DispatchQueue.main.async{
             let imagePickerViewController = UIImagePickerController()
@@ -207,5 +216,10 @@ extension EditUserProfileVC: UIImagePickerControllerDelegate, UINavigationContro
         }
         self.image = image
         dismiss(animated: true, completion: nil)
+    }
+}
+extension EditUserProfileVC: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
     }
 }

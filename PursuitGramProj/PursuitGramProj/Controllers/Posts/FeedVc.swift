@@ -110,18 +110,28 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as? PostsCell
         let data = posts[indexPath.row]
-        DispatchQueue.main.async {
-            FirebaseStorage.postManager.getImages(profileUrl: data.imageUrl!) { (result) in
-                switch result{
-                case .failure(let error):
-                    print(error)
-                case .success(let image):
-                    cell?.postImage.image = UIImage(data: image, scale: 40)
-                    
-                }
-            }
-        }
+     
+//            FirebaseStorage.postManager.getImages(profileUrl: data.imageUrl!) { (result) in
+//                switch result{
+//                case .failure(let error):
+//                    print(error)
+//                case .success(let image):
+//                    cell?.postImage.image = UIImage(data: image, scale: 40)
+//                }}}
         
+        
+                    FirestoreService.manager.getUserFromPost(creatorID: data.creatorID) { (result) in
+                        DispatchQueue.main.async {
+                            
+                        
+                        switch result{
+                        case .failure(let error):
+                            print(error)
+                        case .success(let user):
+                            cell?.userNameLabel.text = user.userName
+                            }
+                        }
+        }
         return cell!
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

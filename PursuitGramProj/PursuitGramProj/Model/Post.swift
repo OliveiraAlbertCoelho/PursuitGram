@@ -15,17 +15,19 @@ struct Post {
     let creatorID: String
     let dateCreated: Date?
     let imageUrl: String?
+
     
     init( creatorID: String, dateCreated: Date? = nil , imageUrl: String? = nil){
         self.creatorID = creatorID
         self.dateCreated = dateCreated
         self.imageUrl = imageUrl
         self.id = UUID().description
-        
+   
     }
     init? (from dict: [String: Any], id: String){
         guard let userId = dict["creatorID"] as? String,
          let userImage = dict["imageUrl"] as? String,
+    
          let dateCreated = (dict["dateCreated"] as? Timestamp)?.dateValue() else { return nil }
         self.creatorID = userId
         self.id = id
@@ -35,7 +37,7 @@ struct Post {
     var fieldsDict: [String: Any] {
            return [
                "creatorID": self.creatorID,
-               "imageUrl": self.imageUrl ?? ""
+               "imageUrl": self.imageUrl ?? "",
            ]
        }
 }

@@ -10,11 +10,10 @@ import UIKit
 import Photos
 class CreatePostVC: UIViewController {
     //MARK: - lifecycle
-    var images = [PHAsset]()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        getImages()
+
     }
     //MARK: - Regular variables
     let imagePickerViewController = UIImagePickerController()
@@ -25,17 +24,6 @@ class CreatePostVC: UIViewController {
             self.postImage.image = image
         }
     }
-    func getImages() {
-        let assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
-        assets.enumerateObjects({ (object, count, stop) in
-            // self.cameraAssets.add(object)
-            self.images.append(object)
-        })
-        //In order to get latest image first, we just reverse the array
-        self.images.reverse()
-        // To show photos, I have taken a UICollectionView
-    }
-    
     //MARK: - Ui Objects
     lazy var postImage: UIImageView = {
         let image = UIImageView()
@@ -82,17 +70,17 @@ class CreatePostVC: UIViewController {
     
     @objc private func shareAction(){
         
+        shareButton.isEnabled = false
         guard let imageData = image.jpegData(compressionQuality: 1) else {
+            showAlert(title: "", message: "Please select a image")
+            shareButton.isEnabled = true
             return
         }
         FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
             switch result{
             case .success(let url):
-              guard let currentUser = self!.user?.uid else{
-                    return self!.showAlert(title: "", message: "Please pick a image")
-                       }
               self?.tabBarController?.selectedIndex = 2
-              let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: url.absoluteString )
+              let post = Post(creatorID: self!.user.uid, dateCreated: nil, imageUrl: url.absoluteString )
                        FirestoreService.manager.createPost(post: post) { (result) in
                            switch result{
                            case .success(()):
@@ -103,6 +91,7 @@ class CreatePostVC: UIViewController {
                        }
             case .failure(let error):
                 self?.showAlert(title: "", message: "Please retry to save Image")
+                self!.shareButton.isEnabled = true
                 print(error)
             }
         })

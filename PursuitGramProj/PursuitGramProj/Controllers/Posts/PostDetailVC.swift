@@ -30,7 +30,7 @@ class PostDetailVC: UIViewController {
     return view
     }()
     
-    //MARK: - Regular funcs
+    //MARK: - Regular functions
     private func setUpView(){
         view.backgroundColor = .white
         setUpPostImage()
@@ -48,7 +48,9 @@ class PostDetailVC: UIViewController {
                 print(error)
                 }}
         }
+        
     }
+    
     //MARK: - Constraints
     private func setUpPostImage() {
            view.addSubview(postImage)
