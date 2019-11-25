@@ -81,11 +81,11 @@ class EditUserProfileVC: UIViewController {
             print("error")
             return
         }
-        DispatchQueue.main.async {
+    
             FirebaseAuthService.manager.updateUserFields(userName: userText, photoURL: imageURL) { (result) in
                 switch result{
                 case .success():
-                    FirestoreService.manager.updateCurrentUser { [weak self] (newResult) in
+                    FirestoreService.manager.updateCurrentUser(userName: userText, photoURL: imageURL) { [weak self] (newResult) in
                         switch newResult {
                         case .success():
                             print(imageURL)
@@ -97,7 +97,7 @@ class EditUserProfileVC: UIViewController {
                 case .failure(let error):
                     print(error)
                 }
-            }}
+            }
         
     }
     

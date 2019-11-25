@@ -35,7 +35,7 @@ struct Post {
     var fieldsDict: [String: Any] {
            return [
                "creatorID": self.creatorID,
-               "imageUrl": self.imageUrl
+               "imageUrl": self.imageUrl ?? ""
            ]
        }
 }

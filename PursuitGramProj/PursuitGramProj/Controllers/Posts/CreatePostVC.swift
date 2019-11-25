@@ -19,7 +19,7 @@ class CreatePostVC: UIViewController {
        override func viewDidLoad() {
            super.viewDidLoad()
            setupViews()
-        getImages()
+         getImages()
        }
     //MARK: - Regular variables
     let imagePickerViewController = UIImagePickerController()
@@ -33,7 +33,7 @@ class CreatePostVC: UIViewController {
     func getImages() {
         let assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         assets.enumerateObjects({ (object, count, stop) in
-            self.images.append(self.getUIImage(asset: object)!)
+        self.images.append(self.getUIImage(asset: object)!)
         })
         self.images.reverse()
     }
@@ -103,10 +103,25 @@ class CreatePostVC: UIViewController {
         return img
     }
     @objc private func shareAction(){
-        
+       guard let userImage = postImage.image
+        else{ return }
+        userImage.resizableImage(withCapInsets: UIEdgeInsets(top: 300, left: 300, bottom: 300, right: 300))
+            guard let imageData = userImage.jpegData(compressionQuality: 0.10) else {
+                   return
+               }
+        FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
+            switch result{
+            case .success(let url):
+                self?.imageURL = url
+            case .failure(let error):
+                self?.showAlert(title: "", message: "Please retry to save Image")
+                print(error)
+            }
+        })
         guard let image = imageURL?.absoluteString, let currentUser = user?.uid else{
-            return showAlert(title: "", message: "Please pick a image")
-        }
+                  return showAlert(title: "", message: "Please pick a image")
+              }
+        
         let post = Post(creatorID: currentUser , dateCreated: nil, imageUrl: image )
         FirestoreService.manager.createPost(post: post) { (result) in
             switch result{
@@ -176,21 +191,6 @@ extension CreatePostVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
         let pickedImage = images[indexPath.row]
         postImage.image = pickedImage
         
-        pickedImage.resizableImage(withCapInsets: UIEdgeInsets(top: 300, left: 300, bottom: 300, right: 300))
-        
-        guard let imageData = pickedImage.jpegData(compressionQuality: 0.10) else {
-            return
-        }
-        FirebaseStorage.postManager.storeImage(image: imageData, completion: { [weak self] (result) in
-            switch result{
-            case .success(let url):
-                self?.showAlert(title: "", message: "Saved")
-                self?.imageURL = url
-            case .failure(let error):
-                self?.showAlert(title: "", message: "Please retry to save Image")
-                print(error)
-            }
-        })
     }
 }
 

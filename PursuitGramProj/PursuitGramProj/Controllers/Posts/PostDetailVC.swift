@@ -16,7 +16,6 @@ class PostDetailVC: UIViewController {
         super.viewDidLoad()
         loadPost()
         setUpView()
-        
         // Do any additional setup after loading the view.
     }
     //MARK: - Variables
@@ -41,8 +40,6 @@ class PostDetailVC: UIViewController {
         }
         FirebaseStorage.postManager.getImages(profileUrl: postData) { (result) in
             DispatchQueue.main.async {
-                
-            
             switch result{
             case .success(let data):
                 self.postImage.image = UIImage(data: data)

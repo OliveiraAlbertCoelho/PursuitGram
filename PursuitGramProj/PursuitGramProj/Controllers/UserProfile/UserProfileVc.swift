@@ -14,19 +14,17 @@ class UserProfileVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-    
+        getPosts()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        checkCurrentUser()
+    
         loadProfileImage()
-        getPosts()
-            self.navigationItem.hidesBackButton = true
+        self.navigationItem.hidesBackButton = true
     }
     
     //MARK: - conditional variables
     var user: AppUser!
-    var isCurrentUser = false
     var posts = [Post](){
         didSet{
             postCollectionView.reloadData()
@@ -77,9 +75,7 @@ class UserProfileVc: UIViewController {
         button.backgroundColor = .black
         button.isHidden = true
         button.addTarget(self, action: #selector(editAction), for: .touchUpInside)
-        if isCurrentUser {
-            button.isHidden = false
-        }
+   
         return button
     }()
     
@@ -126,12 +122,9 @@ class UserProfileVc: UIViewController {
         constrainUserName()
         constrainEditButton()
         constrainCollectionView()
+        
     }
-    private func checkCurrentUser() {
-        if isCurrentUser {
-            user = AppUser(from: FirebaseAuthService.manager.currentUser!)
-        }
-    }
+    
     private func loadProfileImage(){
         self.userName.text = self.user.userName
         guard let photo = self.user.photoURL else {
@@ -149,8 +142,7 @@ class UserProfileVc: UIViewController {
         }}
     
     private func getPosts(){
-        DispatchQueue.main.async {
-            
+        DispatchQueue.main.async { 
             FirestoreService.manager.getUserPosts(for: self.user.uid) { (result) in
                 switch result{
                 case .failure(let error):
@@ -230,7 +222,6 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
                     print(error)
                 case .success(let image):
                     cell?.postImage.image = UIImage(data: image, scale: 40)
-                    
                 }
             }
         }
@@ -238,10 +229,7 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 137, height: 137)
-        
     }
-    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
