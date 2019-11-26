@@ -233,7 +233,7 @@ extension UserProfileVc: UICollectionViewDelegate, UICollectionViewDataSource, U
            let post = posts[indexPath.row]
            let detail = PostDetailVC()
            detail.post = post
-          detail.user = user
+        detail.iscurrentUSer = true
            self.navigationController?.pushViewController(detail, animated: true)
     }
     

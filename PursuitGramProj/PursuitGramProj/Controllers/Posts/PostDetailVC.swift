@@ -20,6 +20,7 @@ class PostDetailVC: UIViewController {
     //MARK: - Variables
     var post: Post?
     var user: AppUser?
+    var iscurrentUSer = false
     
     //MARK: - UI Objects
     lazy var postImage: UIImageView = {
@@ -39,6 +40,9 @@ class PostDetailVC: UIViewController {
         view.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
         setUpPostImage()
         setUpUserLabel()
+        if iscurrentUSer{
+            userLabel.isHidden = true
+        }
     }
     
     private func loadPost(){
