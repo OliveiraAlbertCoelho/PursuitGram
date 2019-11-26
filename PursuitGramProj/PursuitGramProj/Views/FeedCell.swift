@@ -15,6 +15,9 @@ class FeedCell: UICollectionViewCell {
            
             constrainUserName()
             constrainImageView()
+            contentView.backgroundColor =  #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
+            contentView.layer.cornerRadius = 10
+            contentView.layer.borderWidth = 2
             }
         
         required init?(coder: NSCoder) {
@@ -30,7 +33,7 @@ class FeedCell: UICollectionViewCell {
             let label = UILabel()
             label.textColor = .black
             label.textAlignment = .left
-            label.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
+            label.backgroundColor = .clear
             return label
         }()
         
@@ -48,7 +51,7 @@ class FeedCell: UICollectionViewCell {
               contentView.addSubview(userNameLabel)
               userNameLabel.translatesAutoresizingMaskIntoConstraints = false
               NSLayoutConstraint.activate([
-                  userNameLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+                  userNameLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 8),
                   userNameLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: 0),
                   userNameLabel.heightAnchor.constraint(equalToConstant: 30),
                   userNameLabel.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: 0)
