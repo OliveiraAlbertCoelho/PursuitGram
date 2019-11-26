@@ -16,6 +16,15 @@ struct Post {
     let dateCreated: Date?
     let imageUrl: String?
 
+    var dateFormat: String {
+        guard let date = dateCreated else{
+            return "no date"
+        }
+      let dateFormatter = DateFormatter()
+          dateFormatter.dateFormat = "dd MMM, yyyy hh:mm:ss"
+        return dateFormatter.string(from: date)
+
+    }
     
     init( creatorID: String, dateCreated: Date? = nil , imageUrl: String? = nil){
         self.creatorID = creatorID
@@ -40,4 +49,5 @@ struct Post {
                "imageUrl": self.imageUrl ?? "",
            ]
        }
+    
 }

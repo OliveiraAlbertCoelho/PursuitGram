@@ -16,6 +16,7 @@ class PostDetailVC: UIViewController {
         super.viewDidLoad()
         loadPost()
         setUpView()
+        print(post!.dateFormat)
     }
     //MARK: - Variables
     var post: Post?
@@ -31,15 +32,24 @@ class PostDetailVC: UIViewController {
     }()
     lazy var userLabel: UILabel = {
         let label = UILabel()
-        label.text = user?.userName 
+        label.text = user?.userName
+        label.font = UIFont.boldSystemFont(ofSize: 18.0)
         return label
     }()
+    lazy var dateLabel: UILabel = {
+         let label = UILabel()
+         label.text = post?.dateFormat
+        label.font =  UIFont.systemFont(ofSize: 10.0)
+         return label
+     }()
+     
     
     //MARK: - Regular functions
     private func setUpView(){
         view.backgroundColor = #colorLiteral(red: 0.4001295269, green: 0.7655242085, blue: 0.7522726655, alpha: 1)
         setUpPostImage()
         setUpUserLabel()
+        setUpPostDate()
         if iscurrentUSer{
             userLabel.isHidden = true
         }
@@ -78,12 +88,22 @@ class PostDetailVC: UIViewController {
             userLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 userLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-                userLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+                userLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
                 userLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
                 userLabel.topAnchor.constraint(equalTo: self.postImage.bottomAnchor, constant: 10)
             ])
-            
         }
+    private func setUpPostDate() {
+              view.addSubview(dateLabel)
+              dateLabel.translatesAutoresizingMaskIntoConstraints = false
+              NSLayoutConstraint.activate([
+                dateLabel.topAnchor.constraint(equalTo: postImage.bottomAnchor, constant: 0),
+                  dateLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
+                  dateLabel.heightAnchor.constraint(equalToConstant: 30),
+                  dateLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0)
+                
+              ])
+          }
    
     
 }
