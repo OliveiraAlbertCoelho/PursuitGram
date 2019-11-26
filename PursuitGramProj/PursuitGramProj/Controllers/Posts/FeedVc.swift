@@ -33,7 +33,7 @@ class FeedVc: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        cv.register(PostsCell.self, forCellWithReuseIdentifier: "posts")
+        cv.register(FeedCell.self, forCellWithReuseIdentifier: "feed")
         cv.isScrollEnabled = true
         cv.backgroundColor =  #colorLiteral(red: 0.2564295232, green: 0.4383472204, blue: 0.8055806756, alpha: 1)
         cv.delegate = self
@@ -109,7 +109,7 @@ extension FeedVc: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "posts", for: indexPath) as? PostsCell
+        let cell = postCollectionView.dequeueReusableCell(withReuseIdentifier: "feed", for: indexPath) as? FeedCell
         let data = posts[indexPath.row]
         if let userUrl = data.imageUrl{
             FirebaseStorage.postManager.getImages(profileUrl: userUrl) { (result) in

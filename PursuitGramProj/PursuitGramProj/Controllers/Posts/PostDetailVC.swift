@@ -10,18 +10,16 @@ import UIKit
 
 class PostDetailVC: UIViewController {
 
-    var post: Post?
-    var user: AppUser?
     //MARK: - Lifecycle
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadPost()
         setUpView()
-        // Do any additional setup after loading the view.
     }
     //MARK: - Variables
-    
-    
+    var post: Post?
+    var user: AppUser?
     
     //MARK: - UI Objects
     lazy var postImage: UIImageView = {
@@ -32,7 +30,7 @@ class PostDetailVC: UIViewController {
     }()
     lazy var userLabel: UILabel = {
         let label = UILabel()
-        label.text = user?.userName
+        label.text = user?.userName 
         return label
     }()
     
